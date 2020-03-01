@@ -14,13 +14,12 @@
 </head>
 
 <body>
-    <section id="main">
-        <h1>スクリーンネームを入力してね</h1>
-        <form action="{% url 'info_get' %}" method="post" id="form">
-            {% csrf_token %}
-            <p class="input">{{ form }}</p>
-            <p class="btn"><input class="btn_submit" type="submit" value="click"></p>
-        </form>
+    <section id="main_select">
+        <div class="">
+            <p><a href="{% url "rank_friend" %}">フォロー数ランキング</a></p>
+            <p><a href="{% url "rank_follower" %}">フォロワー数ランキング</a></p>
+            <p><a href="{% url "rank_ratio" %}">フォロワー数/フォロー数の比率ランキング</a></p>
+        </div>
     </section>
     
 </body>

@@ -1,9 +1,62 @@
-.form {
-  width: 60%;
-  margin: 0 auto; }
-  .form .btn {
-    padding: 100px;
-    background-color: red;
-    color: yellow; }
+#main {
+  width: 90%;
+  margin: 0 auto;
+  margin-top: 200px;
+  text-align: center; }
+  #main h1 {
+    width: 100%;
+    margin: 0 auto;
+    font-size: 18px; }
+  #main #form {
+    width: 100%;
+    margin: 0 auto;
+    margin-top: 20px; }
+    #main #form .input {
+      margin: 0 auto;
+      text-align: center; }
+      #main #form .input #id_screen_name {
+        border: 1px solid #000;
+        font-size: 20px; }
+    #main #form .btn {
+      width: 100px;
+      margin: 0 auto;
+      text-align: center;
+      margin-top: 20px; }
+      #main #form .btn .btn_submit {
+        border: 1px solid #000;
+        font-size: 20px; }
+
+#main_rank {
+  font-size: 12px; }
+  #main_rank .friend_table {
+    width: 98%;
+    margin: 0 auto;
+    margin-top: 50px; }
+    #main_rank .friend_table .friend_title {
+      font-size: 20px;
+      text-align: center; }
+    #main_rank .friend_table .rank {
+      text-align: center;
+      margin-top: 30px;
+      font-size: 30px;
+      font-weight: bold; }
+    #main_rank .friend_table .table {
+      border-collapse: collapse;
+      border-spacing: 0;
+      width: 100%;
+      margin-top: 50px; }
+      #main_rank .friend_table .table tr {
+        border-bottom: solid 1px #eee;
+        cursor: pointer; }
+        #main_rank .friend_table .table tr th {
+          text-align: center;
+          width: 25%;
+          padding: 15px 0; }
+        #main_rank .friend_table .table tr td {
+          text-align: center;
+          width: 25%;
+          padding: 15px 0; }
+      #main_rank .friend_table .table tr:hover {
+        background-color: #d4f0fd; }
 
 /*# sourceMappingURL=style.css.map */
