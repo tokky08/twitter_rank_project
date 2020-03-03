@@ -23,89 +23,23 @@ params = {
 
 
 
+####################################     フォローしている人/フォロワーの全情報をDBに格納     #########################################
+
 def info_get(request):
 
     if (request.method == "POST"):
+
         params["screen_name"] = request.POST["screen_name"]
         params["form"] = HelloForm(request.POST)
 
-        my_self_info = api.get_user(screen_name=params["screen_name"])
         my_screen_name = params["screen_name"]
+        my_self_info = api.get_user(screen_name=params["screen_name"])
 
         Friend_Info.objects.all().delete()
         Follower_Info.objects.all().delete()
 
-
-        ############          フォローしている人の情報をlistにして取得          ###################
-        friends_icon_list = friend_icon(my_screen_name, my_self_info)
-        friends_name_list = friend_name(my_screen_name, my_self_info)
-        friends_screen_name_list = friend_screen_name(my_screen_name, my_self_info)
-        friends_ids_list = friend_ids(my_screen_name, my_self_info)
-        friends_friends_count_list = friend_friends_count(my_screen_name, my_self_info)
-        friends_followers_count_list = friend_followers_count(my_screen_name, my_self_info)
-        friends_ratio_list = friend_ratio(my_screen_name, my_self_info)
-        friends_statuses_count_list = friend_statuses_count(my_screen_name, my_self_info)
-        friends_created_at_list = friend_created_at(my_screen_name, my_self_info)
-        friends_description_list = friend_description(my_screen_name, my_self_info)
-        friends_favourites_count_list = friend_favourites_count(my_screen_name, my_self_info)
-
-
-        ############          フォロワーの情報をlistにして取得          ###################
-        followers_icon_list = follower_icon(my_screen_name, my_self_info)
-        followers_name_list = follower_name(my_screen_name, my_self_info)
-        followers_screen_name_list = follower_screen_name(my_screen_name, my_self_info)
-        followers_ids_list = follower_ids(my_screen_name, my_self_info)
-        followers_friends_count_list = follower_friends_count(my_screen_name, my_self_info)
-        followers_followers_count_list = follower_followers_count(my_screen_name, my_self_info)
-        followers_ratio_list = follower_ratio(my_screen_name, my_self_info)
-        followers_statuses_count_list = follower_statuses_count(my_screen_name, my_self_info)
-        followers_created_at_list = follower_created_at(my_screen_name, my_self_info)
-        followers_description_list = follower_description(my_screen_name, my_self_info)
-        followers_favourites_count_list = follower_favourites_count(my_screen_name, my_self_info)
-        
-
-        for i in range(my_self_info.friends_count + 1):
-            
-            friend_info = Friend_Info(
-                profile_image_url_https = friends_icon_list[i],
-                name = friends_name_list[i],
-                screen_name = friends_screen_name_list[i],
-                user_id = friends_ids_list[i],
-                friends_count = friends_friends_count_list[i],
-                followers_count = friends_followers_count_list[i],
-                ratio = friends_ratio_list[i],
-                statuses_count = friends_statuses_count_list[i],
-                created_at = friends_created_at_list[i],
-                description = friends_description_list[i],
-                favourites_count = friends_favourites_count_list[i]
-                )
-
-            friend_info.save()
-        
-        params["friend"] = Friend_Info.objects.all()
-
-
-
-        for i in range(my_self_info.followers_count + 1):
-            
-            follower_info = Follower_Info(
-                profile_image_url_https = followers_icon_list[i],
-                name = followers_name_list[i],
-                screen_name = followers_screen_name_list[i],
-                user_id = followers_ids_list[i],
-                friends_count = followers_friends_count_list[i],
-                followers_count = followers_followers_count_list[i],
-                ratio = followers_ratio_list[i],
-                statuses_count = followers_statuses_count_list[i],
-                created_at = followers_created_at_list[i],
-                description = followers_description_list[i],
-                favourites_count = followers_favourites_count_list[i]
-                )
-
-            follower_info.save()
-        
-        params["follower"] = Follower_Info.objects.all()
-        
+        fridnd_info_get(my_screen_name, my_self_info)
+        follower_info_get(my_screen_name, my_self_info)
 
         # return render(request, "app/select.html", params)
         return render(request, "app/tmp.html", params)
@@ -114,6 +48,88 @@ def info_get(request):
     else:
         return render(request, "app/index.html", params)
 
+
+
+
+
+####################################     フォローしている人の情報をDBに格納     #########################################
+
+def fridnd_info_get(my_screen_name, my_self_info):
+
+    ############          フォローしている人の情報をlistにして取得          ###################
+    friends_icon_list = friend_icon(my_screen_name, my_self_info)
+    friends_name_list = friend_name(my_screen_name, my_self_info)
+    friends_screen_name_list = friend_screen_name(my_screen_name, my_self_info)
+    friends_ids_list = friend_ids(my_screen_name, my_self_info)
+    friends_friends_count_list = friend_friends_count(my_screen_name, my_self_info)
+    friends_followers_count_list = friend_followers_count(my_screen_name, my_self_info)
+    friends_ratio_list = friend_ratio(my_screen_name, my_self_info)
+    friends_statuses_count_list = friend_statuses_count(my_screen_name, my_self_info)
+    friends_created_at_list = friend_created_at(my_screen_name, my_self_info)
+    friends_description_list = friend_description(my_screen_name, my_self_info)
+    friends_favourites_count_list = friend_favourites_count(my_screen_name, my_self_info)
+
+
+    for i in range(my_self_info.friends_count + 1):
+            
+        friend_info = Friend_Info(
+            profile_image_url_https = friends_icon_list[i],
+            name = friends_name_list[i],
+            screen_name = friends_screen_name_list[i],
+            user_id = friends_ids_list[i],
+            friends_count = friends_friends_count_list[i],
+            followers_count = friends_followers_count_list[i],
+            ratio = friends_ratio_list[i],
+            statuses_count = friends_statuses_count_list[i],
+            created_at = friends_created_at_list[i],
+            description = friends_description_list[i],
+            favourites_count = friends_favourites_count_list[i]
+            )
+
+        friend_info.save()
+    
+    params["friend"] = Friend_Info.objects.all()
+
+
+
+
+
+####################################     フォロワーの情報をDBに格納     #########################################
+
+def follower_info_get(my_screen_name, my_self_info):
+
+    ############          フォロワーの情報をlistにして取得          ###################
+    followers_icon_list = follower_icon(my_screen_name, my_self_info)
+    followers_name_list = follower_name(my_screen_name, my_self_info)
+    followers_screen_name_list = follower_screen_name(my_screen_name, my_self_info)
+    followers_ids_list = follower_ids(my_screen_name, my_self_info)
+    followers_friends_count_list = follower_friends_count(my_screen_name, my_self_info)
+    followers_followers_count_list = follower_followers_count(my_screen_name, my_self_info)
+    followers_ratio_list = follower_ratio(my_screen_name, my_self_info)
+    followers_statuses_count_list = follower_statuses_count(my_screen_name, my_self_info)
+    followers_created_at_list = follower_created_at(my_screen_name, my_self_info)
+    followers_description_list = follower_description(my_screen_name, my_self_info)
+    followers_favourites_count_list = follower_favourites_count(my_screen_name, my_self_info)
+
+    for i in range(my_self_info.followers_count + 1):
+            
+        follower_info = Follower_Info(
+            profile_image_url_https = followers_icon_list[i],
+            name = followers_name_list[i],
+            screen_name = followers_screen_name_list[i],
+            user_id = followers_ids_list[i],
+            friends_count = followers_friends_count_list[i],
+            followers_count = followers_followers_count_list[i],
+            ratio = followers_ratio_list[i],
+            statuses_count = followers_statuses_count_list[i],
+            created_at = followers_created_at_list[i],
+            description = followers_description_list[i],
+            favourites_count = followers_favourites_count_list[i]
+            )
+
+        follower_info.save()
+    
+    params["follower"] = Follower_Info.objects.all()
 
 
 
