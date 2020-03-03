@@ -15,7 +15,41 @@
         <th>詳細文</th>
         <th>お気に入り数</th>
     </tr>
-    {% for item in data %}
+    {% for item in friend %}
+    <tr>
+        <!--<td>{{ item.id }}</td>-->
+        <td><img src="{{ item.profile_image_url_https }}"></td>
+        <td>{{ item.name }}</td>
+        <td>{{ item.screen_name }}</td>
+        <!--<td>{{ item.user_id }}</td>-->
+        <td>{{ item.friends_count }}</td>
+        <td>{{ item.followers_count }}</td>
+        <td>{{ item.ratio }}</td>
+        <td>{{ item.statuses_count }}</td>
+        <td>{{ item.created_at }}</td>
+        <td>{{ item.description }}</td>
+        <td>{{ item.favourites_count }}</td>
+    </tr>
+    {% endfor %}
+<table>
+
+
+<table>
+    <tr>
+        <!--<th>id</th>-->
+        <th>アイコン</th>
+        <th>name</th>
+        <th>screen_name</th>
+        <!--<th>user_id</th>-->
+        <th>フォロー数</th>
+        <th>フォロワー数</th>
+        <th>比率</th>
+        <th>ツイート数</th>
+        <th>アカウント作成日時</th>
+        <th>詳細文</th>
+        <th>お気に入り数</th>
+    </tr>
+    {% for item in follower %}
     <tr>
         <!--<td>{{ item.id }}</td>-->
         <td><img src="{{ item.profile_image_url_https }}"></td>
