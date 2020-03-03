@@ -59,6 +59,11 @@ def info_get(request):
         friends_ids_list = friend_friends_ids(my_screen_name, my_self_info)
         friends_friends_count_list = friend_friends_count(my_screen_name, my_self_info)
         friends_followers_count_list = friend_followers_count(my_screen_name, my_self_info)
+        friends_ratio_list = friend_ratio(my_screen_name, my_self_info)
+        friends_statuses_count_list = friend_statuses_count(my_screen_name, my_self_info)
+        friends_created_at_list = friend_created_at(my_screen_name, my_self_info)
+        friends_description_list = friend_description(my_screen_name, my_self_info)
+        friends_favourites_count_list = friend_favourites_count(my_screen_name, my_self_info)
         
 
         for i in range(my_self_info.friends_count + 1):
@@ -70,11 +75,11 @@ def info_get(request):
                 user_id = friends_ids_list[i],
                 friends_count = friends_friends_count_list[i],
                 followers_count = friends_followers_count_list[i],
-                ratio ="9",
-                statuses_count ="9",
-                created_at ="2020-02-29",
-                description ="a",
-                favourites_count ="1"
+                ratio = friends_ratio_list[i],
+                statuses_count = friends_statuses_count_list[i],
+                created_at = friends_created_at_list[i],
+                description = friends_description_list[i],
+                favourites_count = friends_favourites_count_list[i]
                 )
 
             user_info.save()
@@ -169,15 +174,76 @@ def friend_followers_count(my_screen_name, my_self_info):
 
     return friends_followers_count_list
 
-        
 
-        
+##########   フォローしている人達のフォロワー数/フォロー数の比率をlistに格納   ##########
+def friend_ratio(my_screen_name, my_self_info):
 
+    friends_followers_count_list = friend_followers_count(my_screen_name, my_self_info)
+    friends_friends_count_list = friend_friends_count(my_screen_name, my_self_info)
+
+    try:
+        friend_ratio_list = []
+        for i in range(my_self_info.friends_count + 1):
+            ratio = round(friends_followers_count_list[i]/friends_friends_count_list[i], 2)
+            friend_ratio_list.append(ratio)
+    
+    except ZeroDivisionError:
+        friend_ratio_list = []
+        for i in range(my_self_info.friends_count + 1):
+            ratio = round((friends_followers_count_list[i]+1)/(friends_friends_count_list[i]+1), 2)
+            friend_ratio_list.append(ratio)
+
+    finally:
+        return friend_ratio_list
     
 
 
+##########   フォローしている人達のツイート数をlistに格納   ##########
+def friend_statuses_count(my_screen_name, my_self_info):
+
+    friends_ids_list = friend_friends_ids(my_screen_name, my_self_info)
+    friends_statuses_count_list = []
+    for friend_id in friends_ids_list:
+        friend = api.get_user(id=friend_id)
+        friends_statuses_count_list.append(friend.statuses_count)
+
+    return friends_statuses_count_list
 
 
+##########   フォローしている人達のアカウント作成日時をlistに格納   ##########
+def friend_created_at(my_screen_name, my_self_info):
+
+    friends_ids_list = friend_friends_ids(my_screen_name, my_self_info)
+    friends_created_at_list = []
+    for friend_id in friends_ids_list:
+        friend = api.get_user(id=friend_id)
+        friends_created_at_list.append(friend.created_at)
+
+    return friends_created_at_list
+
+
+##########   フォローしている人達のプロフィール詳細文をlistに格納   ##########
+def friend_description(my_screen_name, my_self_info):
+
+    friends_ids_list = friend_friends_ids(my_screen_name, my_self_info)
+    friends_description_list = []
+    for friend_id in friends_ids_list:
+        friend = api.get_user(id=friend_id)
+        friends_description_list.append(friend.description)
+
+    return friends_description_list
+
+
+##########   フォローしている人達のいいね数をlistに格納   ##########
+def friend_favourites_count(my_screen_name, my_self_info):
+
+    friends_ids_list = friend_friends_ids(my_screen_name, my_self_info)
+    friends_favourites_count_list = []
+    for friend_id in friends_ids_list:
+        friend = api.get_user(id=friend_id)
+        friends_favourites_count_list.append(friend.favourites_count)
+
+    return friends_favourites_count_list
 
 
 
