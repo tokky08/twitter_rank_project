@@ -1,14 +1,12 @@
-<p>{{ data }}</p>
-
 <h1>tmp.htmlファイルです！</h1>
 
 <table>
     <tr>
-        <th>id</th>
+        <!--<th>id</th>-->
         <th>アイコン</th>
         <th>name</th>
         <th>screen_name</th>
-        <th>user_id</th>
+        <!--<th>user_id</th>-->
         <th>フォロー数</th>
         <th>フォロワー数</th>
         <th>比率</th>
@@ -19,11 +17,11 @@
     </tr>
     {% for item in data %}
     <tr>
-        <td>{{ item.id }}</td>
-        <td>{{ item.profile_image_url_https }}</td>
+        <!--<td>{{ item.id }}</td>-->
+        <td><img src="{{ item.profile_image_url_https }}"></td>
         <td>{{ item.name }}</td>
         <td>{{ item.screen_name }}</td>
-        <td>{{ item.user_id }}</td>
+        <!--<td>{{ item.user_id }}</td>-->
         <td>{{ item.friends_count }}</td>
         <td>{{ item.followers_count }}</td>
         <td>{{ item.ratio }}</td>

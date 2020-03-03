@@ -50,22 +50,26 @@ def info_get(request):
         my_self_info = api.get_user(screen_name=params["screen_name"])
         my_screen_name = params["screen_name"]
 
+        User_Info.objects.all().delete()
+
+
+        friends_icon_list = friend_icon(my_screen_name, my_self_info)
+        friends_name_list = friend_name(my_screen_name, my_self_info)
         friends_screen_name_list = friend_screen_name(my_screen_name, my_self_info)
         friends_ids_list = friend_friends_ids(my_screen_name, my_self_info)
+        friends_friends_count_list = friend_friends_count(my_screen_name, my_self_info)
+        friends_followers_count_list = friend_followers_count(my_screen_name, my_self_info)
         
-    
-        print(friends_ids_list)
-        print(friends_screen_name_list)
 
-        for i in range(my_self_info.friends_count):
+        for i in range(my_self_info.friends_count + 1):
             
             user_info = User_Info(
-                profile_image_url_https ="a",
-                name ="a",
+                profile_image_url_https = friends_icon_list[i],
+                name = friends_name_list[i],
                 screen_name = friends_screen_name_list[i],
                 user_id = friends_ids_list[i],
-                friends_count ="9",
-                followers_count ="9",
+                friends_count = friends_friends_count_list[i],
+                followers_count = friends_followers_count_list[i],
                 ratio ="9",
                 statuses_count ="9",
                 created_at ="2020-02-29",
@@ -88,9 +92,44 @@ def info_get(request):
 
 
 
+##########   フォローしている人達のiconをlistに格納   ##########
+def friend_icon(my_screen_name, my_self_info):
+
+    friends_ids_list = friend_friends_ids(my_screen_name, my_self_info)
+    friends_icon_list = []
+    for friend_id in friends_ids_list:
+        friend = api.get_user(id=friend_id)
+        friends_icon_list.append(friend.profile_image_url_https)
+
+    return friends_icon_list
 
 
-#フォローしている人達のidをlistに格納
+##########   フォローしている人達のnameをlistに格納   ##########
+def friend_name(my_screen_name, my_self_info):
+
+    friends_ids_list = friend_friends_ids(my_screen_name, my_self_info)
+    friends_name_list = []
+    for friend_id in friends_ids_list:
+        friend = api.get_user(id=friend_id)
+        friends_name_list.append(friend.name)
+
+    return friends_name_list
+
+
+##########   フォローしている人達のscreen_nameをlistに格納   ##########
+def friend_screen_name(my_screen_name, my_self_info):
+
+    friends_ids_list = friend_friends_ids(my_screen_name, my_self_info)
+    friends_screen_name_list = []
+    for friend_id in friends_ids_list:
+        friend = api.get_user(id=friend_id)
+        friends_screen_name_list.append(friend.screen_name)
+
+    return friends_screen_name_list
+
+
+
+##########   フォローしている人達のidをlistに格納   ##########
 def friend_friends_ids(my_screen_name, my_self_info):
 
     friends_ids = tweepy.Cursor(api.friends_ids, id=my_screen_name, cursor=-1).items()
@@ -104,19 +143,37 @@ def friend_friends_ids(my_screen_name, my_self_info):
     return friends_ids_list
 
 
-#フォローしている人達のscreen_nameをlistに格納
-def friend_screen_name(my_screen_name, my_self_info):
 
+##########   フォローしている人達のフォロー数をlistに格納   ##########
+def friend_friends_count(my_screen_name, my_self_info):
+    
     friends_ids_list = friend_friends_ids(my_screen_name, my_self_info)
-    friends_screen_name_list = []
+    friends_friends_count_list = []
     for friend_id in friends_ids_list:
         friend = api.get_user(id=friend_id)
-        friends_screen_name_list.append(friend.screen_name)
+        friends_friends_count_list.append(friend.friends_count)
 
-    # フォローしている人達のscreen_name_listに自分のscreen_nameを追加する
-    friends_screen_name_list.append(my_screen_name)
+    return friends_friends_count_list
 
-    return friends_screen_name_list
+        
+
+
+##########   フォローしている人達のフォロワー数をlistに格納   ##########
+def friend_followers_count(my_screen_name, my_self_info):
+
+    friends_ids_list = friend_friends_ids(my_screen_name, my_self_info)
+    friends_followers_count_list = []
+    for friend_id in friends_ids_list:
+        friend = api.get_user(id=friend_id)
+        friends_followers_count_list.append(friend.followers_count)
+
+    return friends_followers_count_list
+
+        
+
+        
+
+    
 
 
 
