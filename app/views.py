@@ -7,6 +7,7 @@ from .forms import HelloForm
 import tweepy
 from .api_key import *
 from .models import Friend_Info, Follower_Info
+from .models import User_Info, Relation_Info
 
 
 auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
@@ -20,7 +21,11 @@ params = {
     "form": HelloForm(),
     "friend": "",
     "follower": "",
-    "rank" : 0,
+    "rank": 0,
+
+    "user_info" : "",
+    "relation_info": "",
+
 }
 
 def friend_friend_rank_asc(request):
@@ -127,16 +132,84 @@ def info_get(request):
         # fridnd_info_get(my_screen_name, my_self_info)
         # follower_info_get(my_screen_name, my_self_info)
 
-        params["friend"] = Friend_Info.objects.filter(my_screen_name=my_screen_name)
-        params["follower"] = Follower_Info.objects.filter(my_screen_name=my_screen_name)
+        User_Info.objects.all().delete()
+        Relation_Info.objects.all().delete()
 
-        return render(request, "app/select.html", params)
-        # return render(request, "app/tmp.html", params)
+        user_info_get(my_screen_name, my_self_info)
+        relation_info_get(my_screen_name, my_self_info)
+
+        # params["friend"] = Friend_Info.objects.filter(my_screen_name=my_screen_name)
+        # params["follower"] = Follower_Info.objects.filter(my_screen_name=my_screen_name)
+
+        # return render(request, "app/select.html", params)
+        return render(request, "app/tmp.html", params)
         # return render(request, "app/index.html", params)
 
 
     else:
         return render(request, "app/index.html", params)
+
+def user_info_get(my_screen_name, my_self_info):
+    
+    friends_icon_list = friend_icon(my_screen_name, my_self_info)
+    friends_name_list = friend_name(my_screen_name, my_self_info)
+    friends_screen_name_list = friend_screen_name(my_screen_name, my_self_info)
+    friends_friends_count_list = friend_friends_count(my_screen_name, my_self_info)
+    friends_followers_count_list = friend_followers_count(my_screen_name, my_self_info)
+    friends_ratio_list = friend_ratio(my_screen_name, my_self_info)
+
+    for i in range(my_self_info.friends_count + 1):
+        user_info = User_Info(
+            profile_image_url_https = friends_icon_list[i],
+            name = friends_name_list[i],
+            screen_name = friends_screen_name_list[i],
+            friends_count = friends_friends_count_list[i],
+            followers_count = friends_followers_count_list[i],
+            ratio = friends_ratio_list[i]
+        )
+        user_info.save()
+
+    followers_icon_list = follower_icon(my_screen_name, my_self_info)
+    followers_name_list = follower_name(my_screen_name, my_self_info)
+    followers_screen_name_list = follower_screen_name(my_screen_name, my_self_info)
+    followers_friends_count_list = follower_friends_count(my_screen_name, my_self_info)
+    followers_followers_count_list = follower_followers_count(my_screen_name, my_self_info)
+    followers_ratio_list = follower_ratio(my_screen_name, my_self_info)
+
+    for i in range(my_self_info.followers_count + 1):
+        user_info = User_Info(
+            profile_image_url_https = followers_icon_list[i],
+            name = followers_name_list[i],
+            screen_name = followers_screen_name_list[i],
+            friends_count = followers_friends_count_list[i],
+            followers_count = followers_followers_count_list[i],
+            ratio = followers_ratio_list[i]
+        )
+        user_info.save()
+    
+    params["user_info"] = User_Info.objects.all()
+
+
+
+def relation_info_get(my_screen_name, my_self_info):
+
+    friends_screen_name_list = friend_screen_name(my_screen_name, my_self_info)
+    for i in range(my_self_info.friends_count + 1):
+        relation_info = Relation_Info(
+            following = my_screen_name,
+            followed = friends_screen_name_list[i]
+        )
+        relation_info.save()
+
+    followers_screen_name_list = follower_screen_name(my_screen_name, my_self_info)
+    for i in range(my_self_info.followers_count + 1):
+        relation_info = Relation_Info(
+            following = followers_screen_name_list[i],
+            followed = my_screen_name
+        )
+        relation_info.save()
+    
+    params["relation_info"] = Relation_Info.objects.all()
 
 
 
