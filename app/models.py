@@ -2,6 +2,7 @@ from django.db import models
 
 # Create your models here.
 class Friend_Info(models.Model):
+    my_screen_name = models.CharField(max_length=100, null=True)
     profile_image_url_https = models.CharField(max_length=100) #アイコン画像
     name = models.CharField(max_length=100)
     screen_name = models.CharField(max_length=100)
@@ -16,6 +17,7 @@ class Friend_Info(models.Model):
 
 
 class Follower_Info(models.Model):
+    my_screen_name = models.CharField(max_length=100, null=True)
     profile_image_url_https = models.CharField(max_length=100) #アイコン画像
     name = models.CharField(max_length=100)
     screen_name = models.CharField(max_length=100)

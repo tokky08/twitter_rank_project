@@ -15,12 +15,97 @@ api = tweepy.API(auth, wait_on_rate_limit=True)
 
 
 params = {
+    "my_self_info" : "",
     "screen_name": "",
     "form": HelloForm(),
     "friend": "",
-    "follower" : "",
+    "follower": "",
+    "rank" : 0,
 }
 
+def friend_friend_rank_asc(request):
+    params["friend"] = params["friend"].order_by("friends_count")
+    friend_rank()
+    return render(request, "app/friend.html", params)
+
+def friend_friend_rank_desc(request):
+    params["friend"] = params["friend"].order_by("friends_count").reverse()
+    friend_rank()
+    return render(request, "app/friend.html", params)
+
+def friend_follower_rank_asc(request):
+    params["friend"] = params["friend"].order_by("followers_count")
+    friend_rank()
+    return render(request, "app/friend.html", params)
+
+def friend_follower_rank_desc(request):
+    params["friend"] = params["friend"].order_by("followers_count").reverse()
+    friend_rank()
+    return render(request, "app/friend.html", params)
+
+def friend_ratio_rank_asc(request):
+    params["friend"] = params["friend"].order_by("ratio")
+    friend_rank()
+    return render(request, "app/friend.html", params)
+
+def friend_ratio_rank_desc(request):
+    params["friend"] = params["friend"].order_by("ratio").reverse()
+    friend_rank()
+    return render(request, "app/friend.html", params)
+
+def follower_friend_rank_asc(request):
+    params["follower"] = params["follower"].order_by("friends_count")
+    follower_rank()
+    return render(request, "app/follower.html", params)
+
+def follower_friend_rank_desc(request):
+    params["follower"] = params["follower"].order_by("friends_count").reverse()
+    follower_rank()
+    return render(request, "app/follower.html", params)
+
+def follower_follower_rank_asc(request):
+    params["follower"] = params["follower"].order_by("followers_count")
+    follower_rank()
+    return render(request, "app/follower.html", params)
+
+def follower_follower_rank_desc(request):
+    params["follower"] = params["follower"].order_by("followers_count").reverse()
+    follower_rank()
+    return render(request, "app/follower.html", params)
+
+def follower_ratio_rank_asc(request):
+    params["follower"] = params["follower"].order_by("ratio")
+    follower_rank()
+    return render(request, "app/follower.html", params)
+
+def follower_ratio_rank_desc(request):
+    params["follower"] = params["follower"].order_by("ratio").reverse()
+    follower_rank()
+    return render(request, "app/follower.html", params)
+
+
+def friend_rank():
+    params["rank"] = 0
+    for screen_name in params["friend"]:
+        params["rank"] += 1
+        if screen_name.screen_name == params["screen_name"]:
+            break
+    return params["rank"]
+
+def follower_rank():
+    params["rank"] = 0
+    for screen_name in params["follower"]:
+        params["rank"] += 1
+        if screen_name.screen_name == params["screen_name"]:
+            break
+    return params["rank"]
+
+
+def select_friend(request):
+    return render(request, "app/select_friend.html")
+
+def select_follower(request):
+    return render(request, "app/select_follower.html")
 
 
 ####################################     フォローしている人/フォロワーの全情報をDBに格納     #########################################
@@ -34,15 +119,20 @@ def info_get(request):
 
         my_screen_name = params["screen_name"]
         my_self_info = api.get_user(screen_name=params["screen_name"])
+        params["my_self_info"] = my_self_info
 
-        Friend_Info.objects.all().delete()
-        Follower_Info.objects.all().delete()
+        # Friend_Info.objects.all().delete()
+        # Follower_Info.objects.all().delete()
 
-        fridnd_info_get(my_screen_name, my_self_info)
-        follower_info_get(my_screen_name, my_self_info)
+        # fridnd_info_get(my_screen_name, my_self_info)
+        # follower_info_get(my_screen_name, my_self_info)
 
-        # return render(request, "app/select.html", params)
-        return render(request, "app/tmp.html", params)
+        params["friend"] = Friend_Info.objects.filter(my_screen_name=my_screen_name)
+        params["follower"] = Follower_Info.objects.filter(my_screen_name=my_screen_name)
+
+        return render(request, "app/select.html", params)
+        # return render(request, "app/tmp.html", params)
+        # return render(request, "app/index.html", params)
 
 
     else:
@@ -64,15 +154,16 @@ def fridnd_info_get(my_screen_name, my_self_info):
     friends_friends_count_list = friend_friends_count(my_screen_name, my_self_info)
     friends_followers_count_list = friend_followers_count(my_screen_name, my_self_info)
     friends_ratio_list = friend_ratio(my_screen_name, my_self_info)
-    friends_statuses_count_list = friend_statuses_count(my_screen_name, my_self_info)
-    friends_created_at_list = friend_created_at(my_screen_name, my_self_info)
-    friends_description_list = friend_description(my_screen_name, my_self_info)
-    friends_favourites_count_list = friend_favourites_count(my_screen_name, my_self_info)
+    # friends_statuses_count_list = friend_statuses_count(my_screen_name, my_self_info)
+    # friends_created_at_list = friend_created_at(my_screen_name, my_self_info)
+    # friends_description_list = friend_description(my_screen_name, my_self_info)
+    # friends_favourites_count_list = friend_favourites_count(my_screen_name, my_self_info)
 
 
     for i in range(my_self_info.friends_count + 1):
             
         friend_info = Friend_Info(
+            my_screen_name = my_screen_name,
             profile_image_url_https = friends_icon_list[i],
             name = friends_name_list[i],
             screen_name = friends_screen_name_list[i],
@@ -80,10 +171,10 @@ def fridnd_info_get(my_screen_name, my_self_info):
             friends_count = friends_friends_count_list[i],
             followers_count = friends_followers_count_list[i],
             ratio = friends_ratio_list[i],
-            statuses_count = friends_statuses_count_list[i],
-            created_at = friends_created_at_list[i],
-            description = friends_description_list[i],
-            favourites_count = friends_favourites_count_list[i]
+            statuses_count = 0,#friends_statuses_count_list[i],
+            created_at = "2020-03-08",#friends_created_at_list[i],
+            description = "NO",#friends_description_list[i],
+            favourites_count = 0,#friends_favourites_count_list[i]
             )
 
         friend_info.save()
@@ -106,14 +197,15 @@ def follower_info_get(my_screen_name, my_self_info):
     followers_friends_count_list = follower_friends_count(my_screen_name, my_self_info)
     followers_followers_count_list = follower_followers_count(my_screen_name, my_self_info)
     followers_ratio_list = follower_ratio(my_screen_name, my_self_info)
-    followers_statuses_count_list = follower_statuses_count(my_screen_name, my_self_info)
-    followers_created_at_list = follower_created_at(my_screen_name, my_self_info)
-    followers_description_list = follower_description(my_screen_name, my_self_info)
-    followers_favourites_count_list = follower_favourites_count(my_screen_name, my_self_info)
+    # followers_statuses_count_list = follower_statuses_count(my_screen_name, my_self_info)
+    # followers_created_at_list = follower_created_at(my_screen_name, my_self_info)
+    # followers_description_list = follower_description(my_screen_name, my_self_info)
+    # followers_favourites_count_list = follower_favourites_count(my_screen_name, my_self_info)
 
     for i in range(my_self_info.followers_count + 1):
             
         follower_info = Follower_Info(
+            my_screen_name = my_screen_name,
             profile_image_url_https = followers_icon_list[i],
             name = followers_name_list[i],
             screen_name = followers_screen_name_list[i],
@@ -121,10 +213,10 @@ def follower_info_get(my_screen_name, my_self_info):
             friends_count = followers_friends_count_list[i],
             followers_count = followers_followers_count_list[i],
             ratio = followers_ratio_list[i],
-            statuses_count = followers_statuses_count_list[i],
-            created_at = followers_created_at_list[i],
-            description = followers_description_list[i],
-            favourites_count = followers_favourites_count_list[i]
+            statuses_count = 0,#followers_statuses_count_list[i],
+            created_at = "2020-03-08",#followers_created_at_list[i],
+            description = "NO",#followers_description_list[i],
+            favourites_count = 0,#followers_favourites_count_list[i]
             )
 
         follower_info.save()

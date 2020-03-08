@@ -1,30 +1,97 @@
-#main {
+@import url("https://fonts.googleapis.com/css?family=Abel");
+#main_top {
   width: 90%;
   margin: 0 auto;
-  margin-top: 200px;
+  margin-top: 80px;
   text-align: center; }
-  #main h1 {
+  #main_top .icon_title {
+    width: 100%;
+    margin: 0 auto; }
+    #main_top .icon_title img {
+      width: 100%; }
+  #main_top .sub_title {
+    opacity: 0.6;
+    font-size: 14px;
+    margin-top: 10px; }
+  #main_top .input_title {
     width: 100%;
     margin: 0 auto;
-    font-size: 18px; }
-  #main #form {
+    font-size: 1.2rem;
+    margin-top: 20px; }
+  #main_top .attention {
+    opacity: 0.6;
+    font-size: 14px; }
+  #main_top #form {
     width: 100%;
     margin: 0 auto;
     margin-top: 20px; }
-    #main #form .input {
+    #main_top #form .input {
       margin: 0 auto;
-      text-align: center; }
-      #main #form .input #id_screen_name {
+      text-align: center;
+      border-radius: 5px; }
+      #main_top #form .input #id_screen_name {
         border: 1px solid #000;
-        font-size: 20px; }
-    #main #form .btn {
+        font-size: 20px;
+        border-radius: 5px; }
+    #main_top #form .btn {
       width: 100px;
       margin: 0 auto;
       text-align: center;
-      margin-top: 20px; }
-      #main #form .btn .btn_submit {
+      margin-top: 20px;
+      border-radius: 5px; }
+      #main_top #form .btn .btn_submit {
         border: 1px solid #000;
-        font-size: 20px; }
+        font-size: 20px;
+        border-radius: 5px; }
+
+@media (min-width: 768px) {
+  #main_top {
+    margin-top: 3%; }
+    #main_top .icon_title {
+      width: 40%; }
+    #main_top .input_title {
+      margin-top: 5%; } }
+#main_select {
+  width: 100%; }
+  #main_select .icon_title {
+    width: 80%;
+    margin: 0 auto;
+    margin-top: 20px; }
+    #main_select .icon_title img {
+      width: 100%; }
+  #main_select .sub_title {
+    opacity: 0.6;
+    width: 50%;
+    margin: 0 auto;
+    text-align: center; }
+  #main_select .rank_select {
+    margin-top: 50px; }
+    #main_select .rank_select .rank_content {
+      width: 85%;
+      margin: 0 auto;
+      margin-top: 60px; }
+      #main_select .rank_select .rank_content .button {
+        padding: 0.4em 1.6em;
+        font-size: 0.8em;
+        color: #00b5ad;
+        text-decoration: none;
+        border: 1px solid #00b5ad;
+        border-radius: 3px;
+        transition: 0.3s;
+        display: flex;
+        justify-content: space-around; }
+        #main_select .rank_select .rank_content .button .fas {
+          margin-right: 0.4em; }
+        #main_select .rank_select .rank_content .button .content {
+          font-size: 20px;
+          line-height: 1.5; }
+      #main_select .rank_select .rank_content .button:hover {
+        color: #fff;
+        background: #00b5ad; }
+
+body {
+  background-image: -webkit-linear-gradient(left, #f4f4f4 4%, #dfdedc 99%);
+  background-image: linear-gradient(to right, #f4f4f4 4%, #dfdedc 99%); }
 
 #main_rank {
   font-size: 12px; }
@@ -50,12 +117,15 @@
         cursor: pointer; }
         #main_rank .friend_table .table tr th {
           text-align: center;
-          width: 25%;
+          width: 18%;
           padding: 15px 0; }
         #main_rank .friend_table .table tr td {
           text-align: center;
-          width: 25%;
+          width: 18%;
           padding: 15px 0; }
+          #main_rank .friend_table .table tr td .icon img {
+            border-radius: 50%;
+            border: 1px solid #000; }
       #main_rank .friend_table .table tr:hover {
         background-color: #d4f0fd; }
 
