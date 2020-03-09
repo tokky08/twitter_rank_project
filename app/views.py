@@ -132,11 +132,17 @@ def info_get(request):
         # fridnd_info_get(my_screen_name, my_self_info)
         # follower_info_get(my_screen_name, my_self_info)
 
-        User_Info.objects.all().delete()
-        Relation_Info.objects.all().delete()
+        # User_Info.objects.all().delete()
+        # Relation_Info.objects.all().delete()
 
-        user_info_get(my_screen_name, my_self_info)
-        relation_info_get(my_screen_name, my_self_info)
+        # user_info_get(my_screen_name, my_self_info)
+        # relation_info_get(my_screen_name, my_self_info)
+
+        # params["user_info"] = User_Info.objects.all()
+        # params["relation_info"] = Relation_Info.objects.all()
+
+        params["relation_info"] = Relation_Info.objects.filter(following=my_screen_name)
+       
 
         # params["friend"] = Friend_Info.objects.filter(my_screen_name=my_screen_name)
         # params["follower"] = Follower_Info.objects.filter(my_screen_name=my_screen_name)
