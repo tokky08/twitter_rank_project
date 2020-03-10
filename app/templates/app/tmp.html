@@ -19,9 +19,47 @@
         <div class="friend_table">
             <p class="friend_title">ランキング</p>
             <p class="rank">順位：{{ rank }}/{{ my_self_info.friends_count|add:"1" }}</p>
+
             <table class="table">
                 <tr>
                     <th>順位</th>
+                    <th>screen_name</th>
+                    <th>アイコン</th>
+                    <th>フォロー数</th>
+                    <th>フォロワー数</th>
+                    <th>比率</th>
+                </tr>
+                {% for item in relation_info %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    {% comment %} <td>{{ item.followed }}</td> {% endcomment %}
+                    {% for ob in item.user_info_set.all %}
+                        <td>{{ ob.screen_name.followed }}</td>
+                        <td>
+                            <a href="https://twitter.com/{{ item.followed }}">
+                                <p class="icon"><img src="{{ ob.profile_image_url_https }}"></p>
+                                <p>{{ ob.name }}</p>
+                            </a>
+                        </td>
+                        <td>{{ ob.friends_count }}</td>
+                        <td>{{ ob.followers_count }}</td>
+                        <td>{{ ob.ratio }}</td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </table>
+
+
+
+
+
+
+
+
+            {% comment %} <table class="table">
+                <tr>
+                    <th>順位</th>
+                    <th>screen_name</th>
                     <th>アイコン</th>
                     <th>フォロー数</th>
                     <th>フォロワー数</th>
@@ -29,10 +67,10 @@
                 </tr>
                 {% for item in user_info %}
                 <tr>
-                    {% comment %} <td>{{item.profile_image_url_https}}</td> {% endcomment %}
                     <td>{{ forloop.counter }}</td>
+                    <td>{{ item.screen_name.following }}</td>
                     <td>
-                        <a href="https://twitter.com/{{ item.screen_name }}">
+                        <a href="https://twitter.com/{{ item.screen_name.following }}">
                             <p class="icon"><img src="{{ item.profile_image_url_https }}"></p>
                             <p>{{ item.name }}</p>
                         </a>
@@ -42,7 +80,7 @@
                     <td>{{ item.ratio }}</td>
                 </tr>
                 {% endfor %}
-            <table>
+            <table> {% endcomment %}
 
             <table class="table">
                 <tr>

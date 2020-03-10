@@ -6,7 +6,7 @@ from django.views.generic import TemplateView
 from .forms import HelloForm
 import tweepy
 from .api_key import *
-from .models import Friend_Info, Follower_Info
+# from .models import Friend_Info, Follower_Info
 from .models import User_Info, Relation_Info
 
 
@@ -33,30 +33,30 @@ def friend_friend_rank_asc(request):
     friend_rank()
     return render(request, "app/friend.html", params)
 
-def friend_friend_rank_desc(request):
-    params["friend"] = params["friend"].order_by("friends_count").reverse()
-    friend_rank()
-    return render(request, "app/friend.html", params)
+# def friend_friend_rank_desc(request):
+#     params["friend"] = params["friend"].order_by("friends_count").reverse()
+#     friend_rank()
+#     return render(request, "app/friend.html", params)
 
 def friend_follower_rank_asc(request):
     params["friend"] = params["friend"].order_by("followers_count")
     friend_rank()
     return render(request, "app/friend.html", params)
 
-def friend_follower_rank_desc(request):
-    params["friend"] = params["friend"].order_by("followers_count").reverse()
-    friend_rank()
-    return render(request, "app/friend.html", params)
+# def friend_follower_rank_desc(request):
+#     params["friend"] = params["friend"].order_by("followers_count").reverse()
+#     friend_rank()
+#     return render(request, "app/friend.html", params)
 
 def friend_ratio_rank_asc(request):
     params["friend"] = params["friend"].order_by("ratio")
     friend_rank()
     return render(request, "app/friend.html", params)
 
-def friend_ratio_rank_desc(request):
-    params["friend"] = params["friend"].order_by("ratio").reverse()
-    friend_rank()
-    return render(request, "app/friend.html", params)
+# def friend_ratio_rank_desc(request):
+#     params["friend"] = params["friend"].order_by("ratio").reverse()
+#     friend_rank()
+#     return render(request, "app/friend.html", params)
 
 def follower_friend_rank_asc(request):
     params["follower"] = params["follower"].order_by("friends_count")
@@ -106,11 +106,45 @@ def follower_rank():
     return params["rank"]
 
 
+# def select_friend(request):
+#     return render(request, "app/select_friend.html")
+
+# def select_follower(request):
+#     return render(request, "app/select_follower.html")
+
+
+def rank():
+    params["rank"] = 0
+    for screen_name in params["user_info"]:
+        params["rank"] += 1
+        if screen_name.screen_name == params["screen_name"]:
+            break
+    return params["rank"]
+
+def friend_friend_rank_desc(request):
+    params["user_info"] = params["user_info"].order_by("friends_count").reverse()
+    rank()
+    return render(request, "app/tmp.html", params)
+
+def friend_follower_rank_desc(request):
+    params["user_info"] = params["user_info"].order_by("followers_count").reverse()
+    rank()
+    return render(request, "app/tmp.html", params)
+
+def friend_ratio_rank_desc(request):
+    params["user_info"] = params["user_info"].order_by("ratio").reverse()
+    rank()
+    return render(request, "app/tmp.html", params)
+
 def select_friend(request):
-    return render(request, "app/select_friend.html")
+    params["relation_info"] = Relation_Info.objects.filter(following=params["screen_name"])
+    params["user_info"] = User_Info.objects.filter(screen_name__following=params["screen_name"])
+    return render(request, "app/select_friend.html", params)
 
 def select_follower(request):
-    return render(request, "app/select_follower.html")
+    params["relation_info"] = Relation_Info.objects.filter(followed=params["screen_name"])
+    params["user_info"] = User_Info.objects.filter(screen_name__followed=params["screen_name"])
+    return render(request, "app/tmp.html", params)
 
 
 ####################################     フォローしている人/フォロワーの全情報をDBに格納     #########################################
@@ -135,13 +169,28 @@ def info_get(request):
         # User_Info.objects.all().delete()
         # Relation_Info.objects.all().delete()
 
-        # user_info_get(my_screen_name, my_self_info)
         # relation_info_get(my_screen_name, my_self_info)
+        # user_info_get(my_screen_name, my_self_info)
+        
+        params["relation_info"] = Relation_Info.objects.all()
+        params["user_info"] = User_Info.objects.all()
 
+        
+
+        # params["relation_info"] = Relation_Info.objects.filter(followed=my_screen_name)
         # params["user_info"] = User_Info.objects.all()
-        # params["relation_info"] = Relation_Info.objects.all()
 
-        params["relation_info"] = Relation_Info.objects.filter(following=my_screen_name)
+
+        
+        # params["user_info"] = User_Info.objects.filter(screen_name__following=my_screen_name)
+
+        # params["relation_info"] = Relation_Info.objects.filter(followed=my_screen_name)
+        # params["user_info"] = User_Info.objects.filter(screen_name__followed=my_screen_name)
+        
+        
+        
+
+        # params["relation_info"] = Relation_Info.objects.filter(following=my_screen_name)
        
 
         # params["friend"] = Friend_Info.objects.filter(my_screen_name=my_screen_name)
@@ -157,40 +206,43 @@ def info_get(request):
 
 def user_info_get(my_screen_name, my_self_info):
     
+    # friends_screen_name_list = friend_screen_name(my_screen_name, my_self_info)
     friends_icon_list = friend_icon(my_screen_name, my_self_info)
     friends_name_list = friend_name(my_screen_name, my_self_info)
-    friends_screen_name_list = friend_screen_name(my_screen_name, my_self_info)
     friends_friends_count_list = friend_friends_count(my_screen_name, my_self_info)
     friends_followers_count_list = friend_followers_count(my_screen_name, my_self_info)
     friends_ratio_list = friend_ratio(my_screen_name, my_self_info)
 
+    j=0
     for i in range(my_self_info.friends_count + 1):
         user_info = User_Info(
+            screen_name = Relation_Info.objects.all()[j],
             profile_image_url_https = friends_icon_list[i],
             name = friends_name_list[i],
-            screen_name = friends_screen_name_list[i],
             friends_count = friends_friends_count_list[i],
             followers_count = friends_followers_count_list[i],
             ratio = friends_ratio_list[i]
         )
+        j+=1
         user_info.save()
 
+    # followers_screen_name_list = follower_screen_name(my_screen_name, my_self_info)
     followers_icon_list = follower_icon(my_screen_name, my_self_info)
     followers_name_list = follower_name(my_screen_name, my_self_info)
-    followers_screen_name_list = follower_screen_name(my_screen_name, my_self_info)
     followers_friends_count_list = follower_friends_count(my_screen_name, my_self_info)
     followers_followers_count_list = follower_followers_count(my_screen_name, my_self_info)
     followers_ratio_list = follower_ratio(my_screen_name, my_self_info)
 
-    for i in range(my_self_info.followers_count + 1):
+    for i in range(my_self_info.followers_count):
         user_info = User_Info(
+            screen_name = Relation_Info.objects.all()[j],
             profile_image_url_https = followers_icon_list[i],
             name = followers_name_list[i],
-            screen_name = followers_screen_name_list[i],
             friends_count = followers_friends_count_list[i],
             followers_count = followers_followers_count_list[i],
             ratio = followers_ratio_list[i]
         )
+        j+=1
         user_info.save()
     
     params["user_info"] = User_Info.objects.all()
@@ -208,7 +260,7 @@ def relation_info_get(my_screen_name, my_self_info):
         relation_info.save()
 
     followers_screen_name_list = follower_screen_name(my_screen_name, my_self_info)
-    for i in range(my_self_info.followers_count + 1):
+    for i in range(my_self_info.followers_count):
         relation_info = Relation_Info(
             following = followers_screen_name_list[i],
             followed = my_screen_name
@@ -281,7 +333,7 @@ def follower_info_get(my_screen_name, my_self_info):
     # followers_description_list = follower_description(my_screen_name, my_self_info)
     # followers_favourites_count_list = follower_favourites_count(my_screen_name, my_self_info)
 
-    for i in range(my_self_info.followers_count + 1):
+    for i in range(my_self_info.followers_count):
             
         follower_info = Follower_Info(
             my_screen_name = my_screen_name,
@@ -509,7 +561,7 @@ def follower_ids(my_screen_name, my_self_info):
         followers_ids_list.append(follower_id)
 
     # フォロワーのid_listに自分のidを追加する
-    followers_ids_list.append(my_self_info.id)
+    # followers_ids_list.append(my_self_info.id)
 
     return followers_ids_list
 
@@ -549,13 +601,13 @@ def follower_ratio(my_screen_name, my_self_info):
 
     try:
         follower_ratio_list = []
-        for i in range(my_self_info.followers_count + 1):
+        for i in range(my_self_info.followers_count):
             ratio = round(followers_followers_count_list[i]/followers_friends_count_list[i], 2)
             follower_ratio_list.append(ratio)
     
     except ZeroDivisionError:
         follower_ratio_list = []
-        for i in range(my_self_info.followers_count + 1):
+        for i in range(my_self_info.followers_count):
             ratio = round((followers_followers_count_list[i]+1)/(followers_friends_count_list[i]+1), 2)
             follower_ratio_list.append(ratio)
 
