@@ -1,0 +1,70 @@
+
+
+
+#main_top {
+    width: 90%;
+    margin: 0 auto;
+    margin-top: 80px;
+    text-align: center;
+    .icon_title{
+      width: 100%;
+      margin: 0 auto;
+      img{
+          width: 100%;
+      }
+    }
+    .sub_title{
+        opacity: 0.6;
+        font-size: 14px;
+        margin-top: 10px;
+    }
+    .input_title {
+      width: 100%;
+      margin: 0 auto;
+      font-size: 1.2rem;
+      margin-top: 20px;
+    }
+    .attention{
+      opacity: 0.6;
+      font-size: 14px;
+    }
+    #form {
+      width: 100%;
+      margin: 0 auto;
+      margin-top: 20px;
+      .input {
+        margin: 0 auto;
+        text-align: center;
+        border-radius: 5px;
+        #id_screen_name {
+          border: 1px solid #000;
+          font-size: 20px;
+          border-radius: 5px;
+        }
+      }
+      .btn {
+        width: 100px;
+        margin: 0 auto;
+        text-align: center;
+        margin-top: 20px;
+        border-radius: 5px;
+        .btn_submit {
+          border: 1px solid #000;
+          font-size: 20px;
+          border-radius: 5px;
+        }
+      }
+    }
+  }
+  
+  @media(min-width: 768px){
+      #main_top{
+          margin-top: 3%;
+          .icon_title{
+              width: 40%;
+          }
+          .input_title{
+              margin-top: 5%;
+          }
+      }
+  }

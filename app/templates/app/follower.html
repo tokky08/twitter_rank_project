@@ -1,0 +1,77 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Twitter Rnak</title>
+    <meta name="description" content="twitterでの相対的に順位を計算するアプリです">
+    <meta name="keywords" content="twitter, API, ランキング">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.css">
+    <link rel="stylesheet" href="{% static 'app/css/style.css' %}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+
+
+<body>
+    <section id="main_rank">
+        <div class="friend_table">
+        {% if request.path == "/follower_friend_rank_asc/" %}
+            <p class="friend_title">フォロー数ランキング（昇順）</p>
+        {% elif request.path == "/follower_friend_rank_desc/" %}
+            <p class="friend_title">フォロー数ランキング（降順）</p>
+        {% elif request.path == "/follower_follower_rank_asc/" %}
+            <p class="friend_title">フォロワー数ランキング（昇順）</p>
+        {% elif request.path == "/follower_follower_rank_desc/" %}
+            <p class="friend_title">フォロワー数ランキング（降順）</p>
+        {% elif request.path == "/follower_ratio_rank_asc/" %}
+            <p class="friend_title">比率ランキング（昇順）</p>
+        {% elif request.path == "/follower_ratio_rank_desc/" %}
+            <p class="friend_title">比率ランキング（降順）</p>
+        {% endif%}
+            <p class="rank">順位：{{ rank }}/{{ my_self_info.followers_count|add:"1" }}</p>
+            <table class="table">
+                <tr>
+                    <th>順位</th>
+                    <th>アイコン</th>
+                    <th>フォロー数</th>
+                    <th>フォロワー数</th>
+                    <th>比率</th>
+                </tr>
+                {% for item in follower %}
+                {% if item.screen_name == screen_name %}
+                <tr class="my_self_colum">
+                    <td>{{ forloop.counter }}</td>
+                    <td>
+                        <a href="https://twitter.com/{{ item.screen_name }}">
+                            <p class="icon"><img src="{{ item.profile_image_url_https }}"></p>
+                            <p>{{ item.name }}</p>
+                        </a>
+                    </td>
+                    <td>{{ item.friends_count }}</td>
+                    <td>{{ item.followers_count }}</td>
+                    <td>{{ item.ratio }}</td>
+                </tr>
+                {% else%}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>
+                        <a href="https://twitter.com/{{ item.screen_name }}">
+                            <p class="icon"><img src="{{ item.profile_image_url_https }}"></p>
+                            <p>{{ item.name }}</p>
+                        </a>
+                    </td>
+                    <td>{{ item.friends_count }}</td>
+                    <td>{{ item.followers_count }}</td>
+                    <td>{{ item.ratio }}</td>
+                </tr>
+                {% endif %}
+                {% endfor %}
+            <table>
+        </div>
+    </section>
+
+</body>
+
+</html>
