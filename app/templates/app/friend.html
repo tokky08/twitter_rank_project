@@ -15,8 +15,33 @@
 
 
 <body>
-    <section id="main_rank">
-        <div class="friend_table">
+    <header id="header_rank">
+
+        <div id="nav-toggle">
+            <div>
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+
+        <div id="gloval-nav">
+            <nav>
+                <ul>
+                    <li class="icon_img"><img src="{% static "app/img/icon_title.png" %}"></li>
+                    <li class="nav_content"><a href="{% url "index" %}">TOP</a></li>
+                    <li class="nav_content"><a href="{% url "follower_ratio_rank_desc" %}">フォロワーと比べる</a></li>
+                </ul>
+            </nav>
+        </div>
+
+        <div class="header_icon_title">
+            <h1 class="icon_title"><img src="{% static "app/img/icon_title.png" %}"></h1>
+            <p class="sub_title">あなたはフォローしている人達の中で何位?</p>
+        </div>
+    </header>
+    <main id="main_rank">
+        <div class="table_rank">
         {% if request.path == "/friend_friend_rank_asc/" %}
             <p class="friend_title">フォロー数ランキング（昇順）</p>
         {% elif request.path == "/friend_friend_rank_desc/" %}
@@ -31,24 +56,54 @@
             <p class="friend_title">比率ランキング（降順）</p>
         {% endif%}
             <p class="rank">順位：{{ rank }}/{{ my_self_info.friends_count|add:"1" }}</p>
+
+            {% if request.path == "/friend_friend_rank_asc/" %}
+            <div class="change_btn">
+                <a href="{% url "friend_friend_rank_desc" %}" class="change">降順へ</a>
+            </div>
+            {% elif request.path == "/friend_friend_rank_desc/" %}
+            <div class="change_btn">
+                <a href="{% url "friend_friend_rank_asc" %}" class="change">昇順へ</a>
+            </div>
+            {% elif request.path == "/friend_follower_rank_asc/" %}
+            <div class="change_btn">
+                <a href="{% url "friend_follower_rank_desc" %}" class="change">降順へ</a>
+            </div>
+            {% elif request.path == "/friend_follower_rank_desc/" %}
+            <div class="change_btn">
+                <a href="{% url "friend_follower_rank_asc" %}" class="change">昇順へ</a>
+            </div>
+            {% elif request.path == "/friend_ratio_rank_asc/" %}
+            <div class="change_btn">
+                <a href="{% url "friend_ratio_rank_desc" %}" class="change">降順へ</a>
+            </div>
+            {% elif request.path == "/friend_ratio_rank_desc/" %}
+            <div class="change_btn">
+                <a href="{% url "friend_ratio_rank_asc" %}" class="change">昇順へ</a>
+            </div>
+            {% endif %}
+            
+            
+
+
             <table class="table">
-                <tr>
-                    <th>順位</th>
-                    <th>アイコン</th>
+                <tr class="heading_colum">
+                    <th>rank</th>
+                    <th>friends user</th>
                 {% if request.path == "/friend_friend_rank_asc/" or request.path == "/friend_friend_rank_desc/" %}
-                    <th class="my_self_colum">フォロー数</th>
+                    <th class="heading">friend</th>
                 {% else %}
-                    <th>フォロー数</th>
+                    <th><a href="{% url 'friend_friend_rank_desc' %}">friend</a></th>
                 {% endif%}
                 {% if request.path == "/friend_follower_rank_asc/" or request.path == "/friend_follower_rank_desc/" %}
-                    <th class="my_self_colum">フォロワー数</th>
+                    <th class="heading">follower</th>
                 {% else %}
-                    <th>フォロワー数</th>
+                    <th><a href="{% url 'friend_follower_rank_desc' %}">follower</a></th>
                 {% endif%}
                 {% if request.path == "/friend_ratio_rank_asc/" or request.path == "/friend_ratio_rank_desc/" %}
-                    <th class="my_self_colum">比率</th>
+                    <th class="heading">ratio</th>
                 {% else %}
-                    <th>比率</th>
+                    <th><a href="{% url 'friend_ratio_rank_desc' %}">ratio</a></th>
                 {% endif%}
                 </tr>
                 {% for item in friend %}
@@ -61,9 +116,21 @@
                             <p>{{ item.name }}</p>
                         </a>
                     </td>
-                    <td>{{ item.friends_count }}</td>
-                    <td>{{ item.followers_count }}</td>
-                    <td>{{ item.ratio }}</td>
+                    {% if request.path == "/friend_friend_rank_asc/" or request.path == "/friend_friend_rank_desc/" %}
+                        <td class="selected_column">{{ item.friends_count }}</td>
+                    {% else %}
+                        <td>{{ item.friends_count }}</td>
+                    {% endif %}
+                    {% if request.path == "/friend_follower_rank_asc/" or request.path == "/friend_follower_rank_desc/" %}
+                        <td class="selected_column">{{ item.followers_count }}</td>
+                    {% else %}
+                        <td>{{ item.followers_count }}</td>
+                    {% endif %}
+                    {% if request.path == "/friend_ratio_rank_asc/" or request.path == "/friend_ratio_rank_desc/" %}
+                        <td class="selected_column">{{ item.ratio }}</td>
+                    {% else %}
+                        <td>{{ item.ratio }}</td>
+                    {% endif %}
                 </tr>
                 {% else%}
                 <tr>
@@ -74,15 +141,44 @@
                             <p>{{ item.name }}</p>
                         </a>
                     </td>
-                    <td>{{ item.friends_count }}</td>
-                    <td>{{ item.followers_count }}</td>
-                    <td>{{ item.ratio }}</td>
+                    {% if request.path == "/friend_friend_rank_asc/" or request.path == "/friend_friend_rank_desc/" %}
+                        <td class="selected_column">{{ item.friends_count }}</td>
+                    {% else %}
+                        <td>{{ item.friends_count }}</td>
+                    {% endif %}
+                    {% if request.path == "/friend_follower_rank_asc/" or request.path == "/friend_follower_rank_desc/" %}
+                        <td class="selected_column">{{ item.followers_count }}</td>
+                    {% else %}
+                        <td>{{ item.followers_count }}</td>
+                    {% endif %}
+                    {% if request.path == "/friend_ratio_rank_asc/" or request.path == "/friend_ratio_rank_desc/" %}
+                        <td class="selected_column">{{ item.ratio }}</td>
+                    {% else %}
+                        <td>{{ item.ratio }}</td>
+                    {% endif %}
                 </tr>
                 {% endif %}
                 {% endfor %}
             <table>
         </div>
-    </section>
+    </main>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script>
+        (function($) {
+            $(function () {
+                $('#nav-toggle').on('click', function() {
+                $('body').toggleClass('open');
+                });
+            });
+            $(function () {
+                $('li').on('click', function() {
+                $('body').toggleClass('open');
+                });
+            });
+        })(jQuery);
+    </script>
+
 
 </body>
 

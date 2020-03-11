@@ -57,14 +57,14 @@
     }
   }
   
-  @media(min-width: 768px){
-      #main_top{
-          margin-top: 3%;
-          .icon_title{
-              width: 40%;
-          }
-          .input_title{
-              margin-top: 5%;
-          }
-      }
+@media(min-width: 768px){
+  #main_top{
+    margin-top: 3%;
+    .icon_title{
+        width: 40%;
+    }
+    .input_title{
+        margin-top: 5%;
+    }
   }
+}
