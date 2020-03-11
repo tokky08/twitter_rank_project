@@ -52,7 +52,8 @@
     #main_top .input_title {
       margin-top: 5%; } }
 #main_select {
-  width: 100%; }
+  width: 100%;
+  margin-bottom: 50px; }
   #main_select .icon_title {
     width: 80%;
     margin: 0 auto;
@@ -67,28 +68,56 @@
   #main_select .rank_select {
     margin-top: 50px; }
     #main_select .rank_select .rank_content {
-      width: 85%;
+      width: 60%;
       margin: 0 auto;
-      margin-top: 60px; }
+      margin-top: 60px;
+      padding: 0.4em 1.6em;
+      font-size: 0.8em;
+      color: #00b5ad;
+      text-decoration: none;
+      border: 1px solid #00b5ad;
+      border-radius: 3px;
+      transition: 0.3s;
+      display: flex;
+      justify-content: space-around; }
       #main_select .rank_select .rank_content .button {
-        padding: 0.4em 1.6em;
-        font-size: 0.8em;
         color: #00b5ad;
-        text-decoration: none;
-        border: 1px solid #00b5ad;
-        border-radius: 3px;
-        transition: 0.3s;
         display: flex;
-        justify-content: space-around; }
+        justify-content: space-around;
+        text-decoration: none;
+        align-items: center; }
         #main_select .rank_select .rank_content .button .fas {
           margin-right: 0.4em; }
         #main_select .rank_select .rank_content .button .content {
           font-size: 20px;
           line-height: 1.5; }
       #main_select .rank_select .rank_content .button:hover {
-        color: #fff;
-        background: #00b5ad; }
+        color: #fff; }
+    #main_select .rank_select .rank_content:hover {
+      color: #fff;
+      background: #00b5ad; }
 
+@media (min-width: 768px) {
+  #main_select .icon_title {
+    width: 40%; }
+  #main_select .rank_select {
+    width: 80%;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 70px; }
+    #main_select .rank_select .rank_content {
+      width: 30%;
+      margin-left: 10px;
+      margin-right: 10px; }
+      #main_select .rank_select .rank_content .button {
+        display: block;
+        padding: 30px; }
+        #main_select .rank_select .rank_content .button .fas {
+          text-align: center;
+          width: 100%; }
+        #main_select .rank_select .rank_content .button .content {
+          margin-top: 20px; } }
 body {
   background-image: -webkit-linear-gradient(left, #f4f4f4 4%, #dfdedc 99%);
   background-image: linear-gradient(to right, #f4f4f4 4%, #dfdedc 99%); }
@@ -112,9 +141,17 @@ body {
       border-spacing: 0;
       width: 100%;
       margin-top: 50px; }
+      #main_rank .friend_table .table .my_self_colum {
+        background-color: #d4f0fd; }
       #main_rank .friend_table .table tr {
         border-bottom: solid 1px #eee;
         cursor: pointer; }
+        #main_rank .friend_table .table tr .friend_count {
+          background-color: #d4f0fd; }
+        #main_rank .friend_table .table tr .follower_count {
+          background-color: #d4f0fd; }
+        #main_rank .friend_table .table tr .ratio_count {
+          background-color: #d4f0fd; }
         #main_rank .friend_table .table tr th {
           text-align: center;
           width: 18%;

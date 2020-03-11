@@ -1,6 +1,7 @@
 
 #main_select{
     width: 100%;
+    margin-bottom: 50px;
     .icon_title{
         width: 80%;
         margin: 0 auto;
@@ -18,20 +19,32 @@
     .rank_select{
         margin-top: 50px;
         .rank_content{
-            width: 85%;
+            width: 60%;
             margin: 0 auto;
             margin-top: 60px;
+
+            padding: 0.4em 1.6em;
+            font-size: 0.8em;
+            color: #00b5ad;
+            text-decoration: none;
+            border: 1px solid #00b5ad;
+            border-radius: 3px;
+            transition: 0.3s;
+            display: flex;
+            justify-content: space-around;
             .button {
                 //display: inline-block;
-                padding: 0.4em 1.6em;
-                font-size: 0.8em;
+                // padding: 0.4em 1.6em;
+                // font-size: 0.8em;
                 color: #00b5ad;
-                text-decoration: none;
-                border: 1px solid #00b5ad;
-                border-radius: 3px;
-                transition: 0.3s;
+                // text-decoration: none;
+                // border: 1px solid #00b5ad;
+                // border-radius: 3px;
+                // transition: 0.3s;
                 display: flex;
                 justify-content: space-around;
+                text-decoration: none;
+                align-items: center;
                 .fas {
                     margin-right: 0.4em;
                 }
@@ -40,15 +53,45 @@
                     line-height: 1.5;
                 }
             }
-            
-            .button:hover {
+            .button:hover{
                 color: #fff;
-                background: #00b5ad;
             }
-            
-            // .fas {
-            //     margin-right: 0.4em;
-            // }
+        }
+        .rank_content:hover{
+            color: #fff;
+            background: #00b5ad;
+        }
+    }
+}
+
+
+@media(min-width: 768px){
+    #main_select{
+        .icon_title{
+            width: 40%;
+        }
+        .rank_select{
+            width: 80%;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            margin-top: 70px;
+            .rank_content{
+                width: 30%;
+                margin-left: 10px;
+                margin-right: 10px;
+                .button{
+                    display: block;
+                    padding: 30px;
+                    .fas{
+                        text-align: center;
+                        width: 100%;
+                    }
+                    .content{
+                        margin-top: 20px;
+                    }
+                }
+            }
         }
     }
 }

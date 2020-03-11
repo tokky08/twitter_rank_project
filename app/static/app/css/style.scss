@@ -36,9 +36,21 @@ body {
       border-spacing: 0;
       width: 100%;
       margin-top: 50px;
+      .my_self_colum{
+        background-color: #d4f0fd;
+      }
       tr {
         border-bottom: solid 1px #eee;
         cursor: pointer;
+        .friend_count{
+            background-color: #d4f0fd;
+        }
+        .follower_count{
+            background-color: #d4f0fd;
+        }
+        .ratio_count{
+            background-color: #d4f0fd;
+        }
         th {
           text-align: center;
           width: 18%;
