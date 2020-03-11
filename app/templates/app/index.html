@@ -14,15 +14,17 @@
 </head>
 
 <body>
-    <section id="main">
-        <h1>スクリーンネームを入力してね</h1>
+    <main id="main_top">
+        <h1 class="icon_title"><img src="{% static "app/img/icon_title.png" %}"></h1>
+        <p class="sub_title">あなたの順位がわかる</p>
+        <h1 class="input_title">screen nameを入力して下さい</h1>
+        <p class="attention">@から始まるIDのことです</p>
         <form action="{% url 'info_get' %}" method="post" id="form">
             {% csrf_token %}
             <p class="input">{{ form }}</p>
             <p class="btn"><input class="btn_submit" type="submit" value="click"></p>
         </form>
-    </section>
-    
+    </main>
 </body>
 
 </html>

@@ -6,6 +6,7 @@ from django.views.generic import TemplateView
 from .forms import HelloForm
 import tweepy
 from .api_key import *
+from .models import Friend_Info, Follower_Info
 
 
 auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
@@ -14,177 +15,117 @@ api = tweepy.API(auth, wait_on_rate_limit=True)
 
 
 params = {
+    "my_self_info" : "",
     "screen_name": "",
     "form": HelloForm(),
-
-    "user_friends": "",
-    "user_followers": "",
-    "friends_ids_list": [],
-    "friends_screen_name_list": [],
-    "followers_ids_list": [],
-    "followers_screen_name_list": [],
-    "friend_followers_list": [],
-    "friend_friends_list": [],
-    "follower_followers_list": [],
-    "follower_friends_list": [],
-    "friend_friends_dict_sort": [],
-    "rank_friend_friends": 0,
-    "friend_followers_dict_sort": [],
-    "rank_friend_followers": 0,
-    "friend_dict": {},
-    "friend_ratio_dict_sort": [],
-    "rank_friend_ratio" : 0,
-
+    "friend": "",
+    "follower": "",
+    "rank" : 0,
 }
 
-# def index(request):
-#     if (request.method == "POST"):
-#         params["screen_name"] = request.POST["screen_name"]
-#         params["form"] = HelloForm(request.POST)
+def friend_friend_rank_asc(request):
+    params["friend"] = params["friend"].order_by("friends_count")
+    friend_rank()
+    return render(request, "app/friend.html", params)
 
-#         return render(request, "app/select.html", params)
-#     else:
-#         return render(request, "app/index.html", params)
+def friend_friend_rank_desc(request):
+    params["friend"] = params["friend"].order_by("friends_count").reverse()
+    friend_rank()
+    return render(request, "app/friend.html", params)
+
+def friend_follower_rank_asc(request):
+    params["friend"] = params["friend"].order_by("followers_count")
+    friend_rank()
+    return render(request, "app/friend.html", params)
+
+def friend_follower_rank_desc(request):
+    params["friend"] = params["friend"].order_by("followers_count").reverse()
+    friend_rank()
+    return render(request, "app/friend.html", params)
+
+def friend_ratio_rank_asc(request):
+    params["friend"] = params["friend"].order_by("ratio")
+    friend_rank()
+    return render(request, "app/friend.html", params)
+
+def friend_ratio_rank_desc(request):
+    params["friend"] = params["friend"].order_by("ratio").reverse()
+    friend_rank()
+    return render(request, "app/friend.html", params)
+
+def follower_friend_rank_asc(request):
+    params["follower"] = params["follower"].order_by("friends_count")
+    follower_rank()
+    return render(request, "app/follower.html", params)
+
+def follower_friend_rank_desc(request):
+    params["follower"] = params["follower"].order_by("friends_count").reverse()
+    follower_rank()
+    return render(request, "app/follower.html", params)
+
+def follower_follower_rank_asc(request):
+    params["follower"] = params["follower"].order_by("followers_count")
+    follower_rank()
+    return render(request, "app/follower.html", params)
+
+def follower_follower_rank_desc(request):
+    params["follower"] = params["follower"].order_by("followers_count").reverse()
+    follower_rank()
+    return render(request, "app/follower.html", params)
+
+def follower_ratio_rank_asc(request):
+    params["follower"] = params["follower"].order_by("ratio")
+    follower_rank()
+    return render(request, "app/follower.html", params)
+
+def follower_ratio_rank_desc(request):
+    params["follower"] = params["follower"].order_by("ratio").reverse()
+    follower_rank()
+    return render(request, "app/follower.html", params)
 
 
-# class HelloView(TemplateView):
+def friend_rank():
+    params["rank"] = 0
+    for screen_name in params["friend"]:
+        params["rank"] += 1
+        if screen_name.screen_name == params["screen_name"]:
+            break
+    return params["rank"]
 
-#     def __init__(self):
-#         self.params = {
-#             "screen_name": "",
-#             "form": HelloForm(),
+def follower_rank():
+    params["rank"] = 0
+    for screen_name in params["follower"]:
+        params["rank"] += 1
+        if screen_name.screen_name == params["screen_name"]:
+            break
+    return params["rank"]
 
-#             "user_friends": "",
-#             "user_followers": "",
-#             "friends_ids_list": [],
-#             "friends_screen_name_list": [],
-#             "followers_ids_list": [],
-#             "followers_screen_name_list": [],
-#             "friend_followers_list": [],
-#             "friend_friends_list": [],
-#             "follower_followers_list": [],
-#             "follower_friends_list": [],
-#             "friend_friends_dict_sort": [],
-#             "rank_friend_friends": 0,
-#             "friend_followers_dict_sort": [],
-#             "rank_friend_followers": 0,
 
-#         }
+def select_friend(request):
+    return render(request, "app/select_friend.html")
 
-#     def get(self, request):
-#         return render(request, "app/index.html", self.params)
+def select_follower(request):
+    return render(request, "app/select_follower.html")
 
-#     def post(self, request):
-#         self.params["screen_name"] = request.POST["screen_name"]
-#         self.params["form"] = HelloForm(request.POST)
 
-#         return render(request, "app/select.html", self.params)
+####################################     フォローしている人/フォロワーの全情報をDBに格納     #########################################
 
 def info_get(request):
+
     if (request.method == "POST"):
+
         params["screen_name"] = request.POST["screen_name"]
         params["form"] = HelloForm(request.POST)
 
-        user = api.get_user(screen_name=params["screen_name"])
-        params["user_friends"] = user.friends_count
-        params["user_followers"] = user.followers_count
-
-        user_friends = params["user_friends"]
-        user_followers = params["user_followers"]
         my_screen_name = params["screen_name"]
+        my_self_info = api.get_user(screen_name=params["screen_name"])
+        params["my_self_info"] = my_self_info
 
-        ############    フォローのユーザーID/スクリーンネームの取得   ################
+        # fridnd_info_get(my_screen_name, my_self_info)
+        # follower_info_get(my_screen_name, my_self_info)
 
-        # フォローのユーザーIDをリストに格納
-        friends_ids = tweepy.Cursor(
-            api.friends_ids, id=my_screen_name, cursor=-1).items()
-        friends_ids_list = []
-        for friend_id in friends_ids:
-            friends_ids_list.append(friend_id)
-
-        params["friends_ids_list"] = friends_ids_list
-
-        # フォローのユーザースクリーンネームをリストに格納
-        friends_screen_name_list = []
-        for friend_id in friends_ids_list:
-            friend = api.get_user(id=friend_id)
-            friends_screen_name_list.append(friend.screen_name)
-
-        # フォローしている人のスクリーンネームリストに自分のスクリーンネームを追加する
-        friends_screen_name_list.append(my_screen_name)
-
-        params["friends_screen_name_list"] = friends_screen_name_list
-
-        ###########   フォロワーのユーザーID/スクリーンネームの取得    ################
-
-        # フォロワーのユーザーIDをリストに格納
-        followers_ids = tweepy.Cursor(
-            api.followers_ids, id=my_screen_name, cursor=-1).items()
-        followers_ids_list = []
-        for follower_id in followers_ids:
-            followers_ids_list.append(follower_id)
-
-        params["followers_ids_list"] = followers_ids_list
-
-        # フォロワーのユーザースクリーンネームをリストに格納
-        followers_screen_name_list = []
-        for follower_id in followers_ids_list:
-            follower = api.get_user(id=follower_id)
-            followers_screen_name_list.append(follower.screen_name)
-
-        # フォローされている人のスクリーンネームリストに自分のスクリーンネームを追加する
-        followers_screen_name_list.append(my_screen_name)
-
-        params["followers_screen_name_list"] = followers_screen_name_list
-
-        ############    各フォローのフォロワー数/フォロー数を取得   ################
-
-        friend_followers_list = []
-        friend_friends_list = []
-        for friend_id in friends_ids_list:
-            friend = api.get_user(id=friend_id)
-
-            # フォローのフォロワー数/フォロー数をリストに格納
-            friend_followers_list.append(friend.followers_count)
-            friend_friends_list.append(friend.friends_count)
-
-        params["friend_followers_list"] = friend_followers_list
-        params["friend_friends_list"] = friend_friends_list
-
-        ############    各フォロワーのフォロワー数/フォロー数を取得   ################
-
-        follower_followers_list = []
-        follower_friends_list = []
-        for follower_id in followers_ids_list:
-            follower = api.get_user(id=follower_id)
-
-            # フォロワーのフォロワー数/フォロー数をリストに格納
-            follower_followers_list.append(follower.followers_count)
-            follower_friends_list.append(follower.friends_count)
-
-        params["follower_followers_list"] = follower_followers_list
-        params["follower_friends_list"] = follower_friends_list
-
-        ############    フォローしている人達の各々のスクリーンネームとフォロー数/フォロワー数を辞書型に結びつける   ################
-
-        # フォローしている人の各々のフォロー数/フォロワー数を二重リストに格納する
-        friend_list = []
-        friend_in_list = []
-
-        for i in range(len(friend_friends_list)):
-            friend_in_list.append(friend_friends_list[i])
-            friend_in_list.append(friend_followers_list[i])
-            friend_in_list
-            friend_list.append(friend_in_list)
-            friend_in_list = []
-
-        # 自分のフォロー数/フォロワー数を二重リストに追加する
-        friend_in_list.append(user_friends)
-        friend_in_list.append(user_followers)
-        friend_list.append(friend_in_list)
-
-        # フォローしている人のスクリーンネームとフォロー数/フォロワー数を辞書方で格納する
-        params["friend_dict"] = dict(zip(friends_screen_name_list, friend_list))
+        params["friend"] = Friend_Info.objects.filter(my_screen_name=my_screen_name)
+        params["follower"] = Follower_Info.objects.filter(my_screen_name=my_screen_name)
 
         return render(request, "app/select.html", params)
 
@@ -192,94 +133,401 @@ def info_get(request):
         return render(request, "app/index.html", params)
 
 
-def rank_friend(request):
-
-    friend_dict = params["friend_dict"]
-    my_screen_name = params["screen_name"]
-
-    ######     フォローしている人達でフォロー数が多い順で自分の順位を取得     ###########
-
-    # フォローしている人のフォロー数が多い順にソート
-    params["friend_friends_dict_sort"] = sorted(
-        friend_dict.items(), key=lambda x: x[1][0], reverse=True)
-    friend_friends_dict_sort = params["friend_friends_dict_sort"]
-
-    # フォローしている人たちの中でフォロー数が多い順で自分の順位を計算
-    rank_friend_friends = 0
-    for screen_name in friend_friends_dict_sort:
-        rank_friend_friends += 1
-        if screen_name[0] == my_screen_name:
-            break
-
-    params["rank_friend_friends"] = rank_friend_friends
-
-    return render(request, "app/rank_friend.html", params)
 
 
 
-def rank_follower(request):
+####################################     フォローしている人の情報をDBに格納     #########################################
 
-    friend_dict = params["friend_dict"]
-    my_screen_name = params["screen_name"]
+def fridnd_info_get(my_screen_name, my_self_info):
 
-    ######     フォローしている人達でフォロワー数が多い順で自分の順位を取得     ###########
+    ############          フォローしている人の情報をlistにして取得          ###################
+    friends_icon_list = friend_icon(my_screen_name, my_self_info)
+    friends_name_list = friend_name(my_screen_name, my_self_info)
+    friends_screen_name_list = friend_screen_name(my_screen_name, my_self_info)
+    friends_ids_list = friend_ids(my_screen_name, my_self_info)
+    friends_friends_count_list = friend_friends_count(my_screen_name, my_self_info)
+    friends_followers_count_list = friend_followers_count(my_screen_name, my_self_info)
+    friends_ratio_list = friend_ratio(my_screen_name, my_self_info)
+    # friends_statuses_count_list = friend_statuses_count(my_screen_name, my_self_info)
+    # friends_created_at_list = friend_created_at(my_screen_name, my_self_info)
+    # friends_description_list = friend_description(my_screen_name, my_self_info)
+    # friends_favourites_count_list = friend_favourites_count(my_screen_name, my_self_info)
 
-    # フォローしている人のフォロワー数が多い順にソート
-    params["friend_followers_dict_sort"] = sorted(
-        friend_dict.items(), key=lambda x: x[1][1], reverse=True)
-    friend_followers_dict_sort = params["friend_followers_dict_sort"]
+    #前のデータを全消去する
+    Friend_Info.objects.filter(my_screen_name=params["screen_name"]).delete()
 
-    # フォローしている人たちの中でフォロワー数が多い順で自分の順位を計算
-    rank_friend_followers = 0
-    for screen_name in friend_followers_dict_sort:
-        rank_friend_followers += 1
-        if screen_name[0] == my_screen_name:
-            break
+    for i in range(my_self_info.friends_count + 1):
+            
+        friend_info = Friend_Info(
+            my_screen_name = my_screen_name,
+            profile_image_url_https = friends_icon_list[i],
+            name = friends_name_list[i],
+            screen_name = friends_screen_name_list[i],
+            user_id = friends_ids_list[i],
+            friends_count = friends_friends_count_list[i],
+            followers_count = friends_followers_count_list[i],
+            ratio = friends_ratio_list[i],
+            statuses_count = 0,#friends_statuses_count_list[i],
+            created_at = "2020-03-08",#friends_created_at_list[i],
+            description = "NO",#friends_description_list[i],
+            favourites_count = 0,#friends_favourites_count_list[i]
+            )
 
-    params["rank_friend_followers"] = rank_friend_followers
-
-    return render(request, "app/rank_follower.html", params)
-
-
-def rank_ratio(request):
-
-    my_screen_name = params["screen_name"]
-    friend_friends_list = params["friend_friends_list"]
-    friend_followers_list = params["friend_followers_list"]
-    user_friends = params["user_friends"]
-    user_followers = params["user_followers"]
-    friends_screen_name_list = params["friends_screen_name_list"]
-
-    ############    フォローしている人達の各々のスクリーンネームとフォロワー数/フォロー数の比率を辞書型に結びつける   ################
-
-
-    #フォロワー数/フォロー数の比率をリストに格納する
-    friend_ratio_list = []
-    for i in range(len(friend_friends_list)):
-        ratio = round(friend_followers_list[i]/friend_friends_list[i], 2)
-        friend_ratio_list.append(ratio)
-
-    user_ratio = round(user_followers/user_friends, 2)
-    friend_ratio_list.append(user_ratio)
-
-    #フォローしている人のスクリーンネームとフォロワー数/フォロー数の比率を辞書方で格納する
-    friend_ratio_dict = dict(zip(friends_screen_name_list, friend_ratio_list ))
+        friend_info.save()
+    
+    params["friend"] = Friend_Info.objects.all()
 
 
-    ######     フォローしている人達でフォロワー数/フォロー数の比率が高い順で自分の順位を取得     ###########
 
 
-    #フォローしている人のフォロワー数/フォロー数の比率が高い順にソート
-    params["friend_ratio_dict_sort"] = sorted(friend_ratio_dict.items(), key=lambda x: x[1], reverse=True)
-    friend_ratio_dict_sort = params["friend_ratio_dict_sort"]
 
-    #フォローしている人たちの中でフォロワー数が多い順で自分の順位を計算
-    rank_friend_ratio = 0
-    for screen_name in friend_ratio_dict_sort:
-        rank_friend_ratio += 1
-        if screen_name[0] == my_screen_name:
-            break
+####################################     フォロワーの情報をDBに格納     #########################################
 
-    params["rank_friend_ratio"] = rank_friend_ratio
+def follower_info_get(my_screen_name, my_self_info):
 
-    return render(request, "app/rank_ratio.html", params)
+    ############          フォロワーの情報をlistにして取得          ###################
+    followers_icon_list = follower_icon(my_screen_name, my_self_info)
+    followers_name_list = follower_name(my_screen_name, my_self_info)
+    followers_screen_name_list = follower_screen_name(my_screen_name, my_self_info)
+    followers_ids_list = follower_ids(my_screen_name, my_self_info)
+    followers_friends_count_list = follower_friends_count(my_screen_name, my_self_info)
+    followers_followers_count_list = follower_followers_count(my_screen_name, my_self_info)
+    followers_ratio_list = follower_ratio(my_screen_name, my_self_info)
+    # followers_statuses_count_list = follower_statuses_count(my_screen_name, my_self_info)
+    # followers_created_at_list = follower_created_at(my_screen_name, my_self_info)
+    # followers_description_list = follower_description(my_screen_name, my_self_info)
+    # followers_favourites_count_list = follower_favourites_count(my_screen_name, my_self_info)
+    
+    #前のデータを全消去する
+    Follower_Info.objects.filter(my_screen_name=params["screen_name"]).delete()
+
+    for i in range(my_self_info.followers_count + 1):
+            
+        follower_info = Follower_Info(
+            my_screen_name = my_screen_name,
+            profile_image_url_https = followers_icon_list[i],
+            name = followers_name_list[i],
+            screen_name = followers_screen_name_list[i],
+            user_id = followers_ids_list[i],
+            friends_count = followers_friends_count_list[i],
+            followers_count = followers_followers_count_list[i],
+            ratio = followers_ratio_list[i],
+            statuses_count = 0,#followers_statuses_count_list[i],
+            created_at = "2020-03-08",#followers_created_at_list[i],
+            description = "NO",#followers_description_list[i],
+            favourites_count = 0,#followers_favourites_count_list[i]
+            )
+
+        follower_info.save()
+    
+    params["follower"] = Follower_Info.objects.all()
+
+
+
+####################################     フォローしている人の情報取得     #########################################
+
+
+
+##########   フォローしている人達のiconをlistに格納   ##########
+def friend_icon(my_screen_name, my_self_info):
+
+    friends_ids_list = friend_ids(my_screen_name, my_self_info)
+    friends_icon_list = []
+    for friend_id in friends_ids_list:
+        friend = api.get_user(id=friend_id)
+        friends_icon_list.append(friend.profile_image_url_https)
+
+    return friends_icon_list
+
+
+##########   フォローしている人達のnameをlistに格納   ##########
+def friend_name(my_screen_name, my_self_info):
+
+    friends_ids_list = friend_ids(my_screen_name, my_self_info)
+    friends_name_list = []
+    for friend_id in friends_ids_list:
+        friend = api.get_user(id=friend_id)
+        friends_name_list.append(friend.name)
+
+    return friends_name_list
+
+
+##########   フォローしている人達のscreen_nameをlistに格納   ##########
+def friend_screen_name(my_screen_name, my_self_info):
+
+    friends_ids_list = friend_ids(my_screen_name, my_self_info)
+    friends_screen_name_list = []
+    for friend_id in friends_ids_list:
+        friend = api.get_user(id=friend_id)
+        friends_screen_name_list.append(friend.screen_name)
+
+    return friends_screen_name_list
+
+
+
+##########   フォローしている人達のidをlistに格納   ##########
+def friend_ids(my_screen_name, my_self_info):
+
+    friends_ids = tweepy.Cursor(api.friends_ids, id=my_screen_name, cursor=-1).items()
+    friends_ids_list = []
+    for friend_id in friends_ids:
+        friends_ids_list.append(friend_id)
+
+    # フォローしている人達のid_listに自分のidを追加する
+    friends_ids_list.append(my_self_info.id)
+
+    return friends_ids_list
+
+
+
+##########   フォローしている人達のフォロー数をlistに格納   ##########
+def friend_friends_count(my_screen_name, my_self_info):
+    
+    friends_ids_list = friend_ids(my_screen_name, my_self_info)
+    friends_friends_count_list = []
+    for friend_id in friends_ids_list:
+        friend = api.get_user(id=friend_id)
+        friends_friends_count_list.append(friend.friends_count)
+
+    return friends_friends_count_list
+
+        
+
+
+##########   フォローしている人達のフォロワー数をlistに格納   ##########
+def friend_followers_count(my_screen_name, my_self_info):
+
+    friends_ids_list = friend_ids(my_screen_name, my_self_info)
+    friends_followers_count_list = []
+    for friend_id in friends_ids_list:
+        friend = api.get_user(id=friend_id)
+        friends_followers_count_list.append(friend.followers_count)
+
+    return friends_followers_count_list
+
+
+##########   フォローしている人達のフォロワー数/フォロー数の比率をlistに格納   ##########
+def friend_ratio(my_screen_name, my_self_info):
+
+    friends_followers_count_list = friend_followers_count(my_screen_name, my_self_info)
+    friends_friends_count_list = friend_friends_count(my_screen_name, my_self_info)
+
+    try:
+        friend_ratio_list = []
+        for i in range(my_self_info.friends_count + 1):
+            ratio = round(friends_followers_count_list[i]/friends_friends_count_list[i], 2)
+            friend_ratio_list.append(ratio)
+    
+    except ZeroDivisionError:
+        friend_ratio_list = []
+        for i in range(my_self_info.friends_count + 1):
+            ratio = round((friends_followers_count_list[i]+1)/(friends_friends_count_list[i]+1), 2)
+            friend_ratio_list.append(ratio)
+
+    finally:
+        return friend_ratio_list
+    
+
+
+##########   フォローしている人達のツイート数をlistに格納   ##########
+def friend_statuses_count(my_screen_name, my_self_info):
+
+    friends_ids_list = friend_ids(my_screen_name, my_self_info)
+    friends_statuses_count_list = []
+    for friend_id in friends_ids_list:
+        friend = api.get_user(id=friend_id)
+        friends_statuses_count_list.append(friend.statuses_count)
+
+    return friends_statuses_count_list
+
+
+##########   フォローしている人達のアカウント作成日時をlistに格納   ##########
+def friend_created_at(my_screen_name, my_self_info):
+
+    friends_ids_list = friend_ids(my_screen_name, my_self_info)
+    friends_created_at_list = []
+    for friend_id in friends_ids_list:
+        friend = api.get_user(id=friend_id)
+        friends_created_at_list.append(friend.created_at)
+
+    return friends_created_at_list
+
+
+##########   フォローしている人達のプロフィール詳細文をlistに格納   ##########
+def friend_description(my_screen_name, my_self_info):
+
+    friends_ids_list = friend_ids(my_screen_name, my_self_info)
+    friends_description_list = []
+    for friend_id in friends_ids_list:
+        friend = api.get_user(id=friend_id)
+        friends_description_list.append(friend.description)
+
+    return friends_description_list
+
+
+##########   フォローしている人達のいいね数をlistに格納   ##########
+def friend_favourites_count(my_screen_name, my_self_info):
+
+    friends_ids_list = friend_ids(my_screen_name, my_self_info)
+    friends_favourites_count_list = []
+    for friend_id in friends_ids_list:
+        friend = api.get_user(id=friend_id)
+        friends_favourites_count_list.append(friend.favourites_count)
+
+    return friends_favourites_count_list
+
+
+
+
+####################################     フォロワーの情報取得     #########################################
+
+
+
+##########   フォロワーのiconをlistに格納   ##########
+def follower_icon(my_screen_name, my_self_info):
+
+    followers_ids_list = follower_ids(my_screen_name, my_self_info)
+    followers_icon_list = []
+    for follower_id in followers_ids_list:
+        follower = api.get_user(id=follower_id)
+        followers_icon_list.append(follower.profile_image_url_https)
+
+    return followers_icon_list
+
+
+##########   フォロワーのnameをlistに格納   ##########
+def follower_name(my_screen_name, my_self_info):
+
+    followers_ids_list = follower_ids(my_screen_name, my_self_info)
+    followers_name_list = []
+    for follower_id in followers_ids_list:
+        follower = api.get_user(id=follower_id)
+        followers_name_list.append(follower.name)
+
+    return followers_name_list
+
+
+##########   フォロワーのscreen_nameをlistに格納   ##########
+def follower_screen_name(my_screen_name, my_self_info):
+
+    followers_ids_list = follower_ids(my_screen_name, my_self_info)
+    followers_screen_name_list = []
+    for follower_id in followers_ids_list:
+        follower = api.get_user(id=follower_id)
+        followers_screen_name_list.append(follower.screen_name)
+
+    return followers_screen_name_list
+
+
+
+##########   フォロワーのidをlistに格納   ##########
+def follower_ids(my_screen_name, my_self_info):
+
+    followers_ids = tweepy.Cursor(api.followers_ids, id=my_screen_name, cursor=-1).items()
+    followers_ids_list = []
+    for follower_id in followers_ids:
+        followers_ids_list.append(follower_id)
+
+    # フォロワーのid_listに自分のidを追加する
+    followers_ids_list.append(my_self_info.id)
+
+    return followers_ids_list
+
+
+
+##########   フォロワーのフォロー数をlistに格納   ##########
+def follower_friends_count(my_screen_name, my_self_info):
+    
+    followers_ids_list = follower_ids(my_screen_name, my_self_info)
+    followers_friends_count_list = []
+    for follower_id in followers_ids_list:
+        follower = api.get_user(id=follower_id)
+        followers_friends_count_list.append(follower.friends_count)
+
+    return followers_friends_count_list
+
+        
+
+
+##########   フォロワーのフォロワー数をlistに格納   ##########
+def follower_followers_count(my_screen_name, my_self_info):
+
+    followers_ids_list = follower_ids(my_screen_name, my_self_info)
+    followers_followers_count_list = []
+    for follower_id in followers_ids_list:
+        follower = api.get_user(id=follower_id)
+        followers_followers_count_list.append(follower.followers_count)
+
+    return followers_followers_count_list
+
+
+##########   フォロワーのフォロワー数/フォロー数の比率をlistに格納   ##########
+def follower_ratio(my_screen_name, my_self_info):
+
+    followers_followers_count_list = follower_followers_count(my_screen_name, my_self_info)
+    followers_friends_count_list = follower_friends_count(my_screen_name, my_self_info)
+
+    try:
+        follower_ratio_list = []
+        for i in range(my_self_info.followers_count + 1):
+            ratio = round(followers_followers_count_list[i]/followers_friends_count_list[i], 2)
+            follower_ratio_list.append(ratio)
+    
+    except ZeroDivisionError:
+        follower_ratio_list = []
+        for i in range(my_self_info.followers_count + 1):
+            ratio = round((followers_followers_count_list[i]+1)/(followers_friends_count_list[i]+1), 2)
+            follower_ratio_list.append(ratio)
+
+    finally:
+        return follower_ratio_list
+    
+
+
+##########   フォロワーのツイート数をlistに格納   ##########
+def follower_statuses_count(my_screen_name, my_self_info):
+
+    followers_ids_list = follower_ids(my_screen_name, my_self_info)
+    followers_statuses_count_list = []
+    for follower_id in followers_ids_list:
+        follower = api.get_user(id=follower_id)
+        followers_statuses_count_list.append(follower.statuses_count)
+
+    return followers_statuses_count_list
+
+
+##########   フォロワーのアカウント作成日時をlistに格納   ##########
+def follower_created_at(my_screen_name, my_self_info):
+
+    followers_ids_list = follower_ids(my_screen_name, my_self_info)
+    followers_created_at_list = []
+    for follower_id in followers_ids_list:
+        follower = api.get_user(id=follower_id)
+        followers_created_at_list.append(follower.created_at)
+
+    return followers_created_at_list
+
+
+##########   フォロワーのプロフィール詳細文をlistに格納   ##########
+def follower_description(my_screen_name, my_self_info):
+
+    followers_ids_list = follower_ids(my_screen_name, my_self_info)
+    followers_description_list = []
+    for follower_id in followers_ids_list:
+        follower = api.get_user(id=follower_id)
+        followers_description_list.append(follower.description)
+
+    return followers_description_list
+
+
+##########   フォロワーのいいね数をlistに格納   ##########
+def follower_favourites_count(my_screen_name, my_self_info):
+
+    followers_ids_list = follower_ids(my_screen_name, my_self_info)
+    followers_favourites_count_list = []
+    for follower_id in followers_ids_list:
+        follower = api.get_user(id=follower_id)
+        followers_favourites_count_list.append(follower.favourites_count)
+
+    return followers_favourites_count_list
+

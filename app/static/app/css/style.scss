@@ -1,38 +1,18 @@
-#main {
-  width: 90%;
-  margin: 0 auto;
-  margin-top: 200px;
-  text-align: center;
-  h1 {
-    width: 100%;
-    margin: 0 auto;
-    font-size: 18px;
-  }
-  #form {
-    width: 100%;
-    margin: 0 auto;
-    margin-top: 20px;
-    .input {
-      //width: 120px;
-      margin: 0 auto;
-      text-align: center;
-      //border: 1px solid #000;
-      #id_screen_name {
-        border: 1px solid #000;
-        font-size: 20px;
-      }
-    }
-    .btn {
-      width: 100px;
-      margin: 0 auto;
-      text-align: center;
-      margin-top: 20px;
-      .btn_submit {
-        border: 1px solid #000;
-        font-size: 20px;
-      }
-    }
-  }
+@import "compass";
+@import url("https://fonts.googleapis.com/css?family=Abel");
+@import "top";
+@import "select";
+
+$baseColor: #15202b;
+$fontColor: #ffffff;
+
+// body{
+//     //background-color: $baseColor;
+// }
+
+body {
+  background-image: -webkit-linear-gradient(left, #f4f4f4 4%, #dfdedc 99%);
+  background-image: linear-gradient(to right, #f4f4f4 4%, #dfdedc 99%);
 }
 
 #main_rank {
@@ -56,18 +36,36 @@
       border-spacing: 0;
       width: 100%;
       margin-top: 50px;
+      .my_self_colum{
+        background-color: #d4f0fd;
+      }
       tr {
         border-bottom: solid 1px #eee;
         cursor: pointer;
+        .friend_count{
+            background-color: #d4f0fd;
+        }
+        .follower_count{
+            background-color: #d4f0fd;
+        }
+        .ratio_count{
+            background-color: #d4f0fd;
+        }
         th {
           text-align: center;
-          width: 25%;
+          width: 18%;
           padding: 15px 0;
         }
         td {
           text-align: center;
-          width: 25%;
+          width: 18%;
           padding: 15px 0;
+          .icon {
+            img {
+              border-radius: 50%;
+              border: 1px solid #000;
+            }
+          }
         }
       }
       tr:hover {

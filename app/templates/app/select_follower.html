@@ -1,0 +1,45 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Twitter Rnak</title>
+    <meta name="description" content="twitterでの相対的に順位を計算するアプリです">
+    <meta name="keywords" content="twitter, API, ランキング">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.css">
+    <link rel="stylesheet" href="{% static 'app/css/style.css' %}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" rel="stylesheet">
+</head>
+
+
+<body>
+    <section id="main_select">
+        <h1 class="icon_title"><img src="{% static "app/img/icon_title.png" %}"></h1>
+        <p class="sub_title">あなたの順位がわかる</p>
+        <div class="rank_select">
+            <div class="rank_content">
+                <a href="{% url 'follower_friend_rank_desc' %}" class="button">
+                    <p class="fas fa-crown fa-4x"></p>
+                    <p class="content">フォロー数で比べる</p>
+                </a>
+            </div>
+            <div class="rank_content">
+                <a href="{% url 'follower_follower_rank_desc' %}" class="button">
+                    <p class="fas fa-crown fa-4x"></p>
+                    <p class="content">フォロワー数で比べる</p>
+                </a>
+            </div>
+            <div class="rank_content">
+                <a href="{% url 'follower_ratio_rank_desc' %}" class="button">
+                    <p class="fas fa-crown fa-4x"></p>
+                    <p class="content">フォロワー数/フォロー数の比率で比べる</p>
+                </a>
+            </div>
+        </div>
+    </section>
+</body>
+
+</html>
