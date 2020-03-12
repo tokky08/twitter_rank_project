@@ -1,0 +1,133 @@
+@import "mixin";
+
+#header_rank {
+  .order_change_btn{
+    position: absolute;
+    top: 3%;
+    left: 3%;
+    .change{
+      font-size: 0.8rem;
+    }
+  }
+  .header_icon_title {
+    .icon_title {
+      width: 60%;
+      margin: 0 auto;
+      img {
+        width: 100%;
+      }
+    }
+    .sub_title {
+      text-align: center;
+      font-size: 8px;
+    }
+  }
+}
+
+#main_rank {
+  font-size: 0.8rem;
+  .table_rank {
+    width: 98%;
+    margin: 0 auto;
+    margin-top: 1.5rem;
+    margin-bottom: 3rem;
+    .friend_title {
+      font-size: 20px;
+      text-align: center;
+    }
+    .rank {
+      text-align: center;
+      margin-top: 30px;
+      font-size: 30px;
+      font-weight: bold;
+    }
+    .table {
+      border-collapse: collapse;
+      border-spacing: 0;
+      width: 100%;
+      margin-top: 10px;
+      .heading {
+        font-size: 1.2rem;
+      }
+      .heading_colum {
+        background-color: #00b5ad;
+        color: #fff;
+      }
+      tr {
+        border-bottom: solid 1px #00b5ad;
+        cursor: pointer;
+        th {
+          text-align: center;
+          width: 18%;
+          padding: 15px 0;
+          a {
+            text-decoration: none;
+            color: #fff;
+            position: relative;
+          }
+          a:hover {
+            opacity: 0.6;
+          }
+        }
+        td {
+          text-align: center;
+          width: 18%;
+          padding: 15px 0;
+          a {
+            text-decoration: none;
+            position: relative;
+            color: #000;
+            .icon {
+              img {
+                border-radius: 50%;
+                border: 1px solid #000;
+              }
+            }
+          }
+          a:hover{
+              font-size: 1.15rem;
+              color: #00b5ad;
+          }
+        }
+        .selected_column {
+          font-size: 1.1rem;
+          font-weight: bold;
+        }
+      }
+      .my_self_colum {
+        background-color: #d4f0fd;
+      }
+    }
+  }
+}
+
+@media (min-width: 768px) {
+  #header_rank {
+    .order_change_btn{
+      top: 5%;
+      left: 10%;
+      .change{
+        font-size: 1.2rem;
+      }
+    }
+    .header_icon_title {
+      width: 60%;
+      margin: 0 auto;
+      .sub_title {
+        font-size: 0.8rem;
+      }
+    }
+  }
+  #main_rank {
+    font-size: 1.1rem;
+    .table_rank {
+      width: 80%;
+      .table {
+        margin-top: 2%;
+        .heading {
+          font-size: 1.7rem;
+        }
+      }
+    }
+  }
+}

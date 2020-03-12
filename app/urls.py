@@ -25,6 +25,7 @@ urlpatterns = [
 
     path("select_friend/", views.select_friend, name="select_friend"),
     path("select_follower/", views.select_follower, name="select_follower"),
+    path("", views.index, name="index"),
     # path("rank_friend/", views.rank_friend, name="rank_friend"),
     # path("rank_follower/", views.rank_follower, name="rank_follower"),
     # path("rank_ratio/", views.rank_ratio, name="rank_ratio"),
