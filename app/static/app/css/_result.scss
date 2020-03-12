@@ -1,4 +1,14 @@
+@import "mixin";
+
 #header_rank {
+  .order_change_btn{
+    position: absolute;
+    top: 3%;
+    left: 3%;
+    .change{
+      font-size: 0.8rem;
+    }
+  }
   .header_icon_title {
     .icon_title {
       width: 60%;
@@ -21,7 +31,6 @@
     margin: 0 auto;
     margin-top: 1.5rem;
     margin-bottom: 3rem;
-    //position: relative;
     .friend_title {
       font-size: 20px;
       text-align: center;
@@ -32,31 +41,6 @@
       font-size: 30px;
       font-weight: bold;
     }
-
-    .change_btn {
-      position: absolute;
-      //top: 60px;
-      top: 20px;
-      right: 0;
-      bottom: 0;
-      left: 10px;
-      .change {
-        display: inline-block;
-        padding: 0.4em 1.6em;
-        font-size: 0.8rem;
-        color: #00b5ad;
-        text-decoration: none;
-        user-select: none;
-        border: 1px #00b5ad solid;
-        border-radius: 20px;
-        transition: 0.4s ease;
-      }
-      .change:hover {
-        color: #fff;
-        background: #00b5ad;
-      }
-    }
-
     .table {
       border-collapse: collapse;
       border-spacing: 0;
@@ -64,27 +48,14 @@
       margin-top: 10px;
       .heading {
         font-size: 1.2rem;
-        //font-weight: bold;
-        //color: #0C46F2;
       }
       .heading_colum {
-        //background-color:#FCCECE;
         background-color: #00b5ad;
         color: #fff;
       }
       tr {
-        //border-bottom: solid 1px #eee;
         border-bottom: solid 1px #00b5ad;
         cursor: pointer;
-        .friend_count {
-          background-color: #d4f0fd;
-        }
-        .follower_count {
-          background-color: #d4f0fd;
-        }
-        .ratio_count {
-          background-color: #d4f0fd;
-        }
         th {
           text-align: center;
           width: 18%;
@@ -132,15 +103,16 @@
 
 @media (min-width: 768px) {
   #header_rank {
+    .order_change_btn{
+      top: 5%;
+      left: 10%;
+      .change{
+        font-size: 1.2rem;
+      }
+    }
     .header_icon_title {
       width: 60%;
       margin: 0 auto;
-      .change_btn {
-        margin-top: 60px;
-        .change {
-          font-size: 1.3rem;
-        }
-      }
       .sub_title {
         font-size: 0.8rem;
       }
@@ -150,32 +122,8 @@
     font-size: 1.1rem;
     .table_rank {
       width: 80%;
-      position: relative;
-      .change_btn {
-        text-align: right;
-        margin-top: 1.5rem;
-        margin-right: 1.5rem;
-        display: block;
-        top: 60px;
-        .change {
-          display: inline-block;
-          padding: 0.4em 1.6em;
-          font-size: 1rem;
-          color: #00b5ad;
-          text-decoration: none;
-          user-select: none;
-          border: 1px #00b5ad solid;
-          border-radius: 20px;
-          transition: 0.4s ease;
-        }
-        .change:hover {
-          color: #fff;
-          background: #00b5ad;
-        }
-      }
-
       .table {
-        margin-top: 50px;
+        margin-top: 2%;
         .heading {
           font-size: 1.7rem;
         }

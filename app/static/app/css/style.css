@@ -118,6 +118,12 @@
           width: 100%; }
         #main_select .rank_select .rank_content .button .content {
           margin-top: 20px; } }
+#header_rank .order_change_btn {
+  position: absolute;
+  top: 3%;
+  left: 3%; }
+  #header_rank .order_change_btn .change {
+    font-size: 0.8rem; }
 #header_rank .header_icon_title .icon_title {
   width: 60%;
   margin: 0 auto; }
@@ -142,25 +148,6 @@
       margin-top: 30px;
       font-size: 30px;
       font-weight: bold; }
-    #main_rank .table_rank .change_btn {
-      position: absolute;
-      top: 20px;
-      right: 0;
-      bottom: 0;
-      left: 10px; }
-      #main_rank .table_rank .change_btn .change {
-        display: inline-block;
-        padding: 0.4em 1.6em;
-        font-size: 0.8rem;
-        color: #00b5ad;
-        text-decoration: none;
-        user-select: none;
-        border: 1px #00b5ad solid;
-        border-radius: 20px;
-        transition: 0.4s ease; }
-      #main_rank .table_rank .change_btn .change:hover {
-        color: #fff;
-        background: #00b5ad; }
     #main_rank .table_rank .table {
       border-collapse: collapse;
       border-spacing: 0;
@@ -174,12 +161,6 @@
       #main_rank .table_rank .table tr {
         border-bottom: solid 1px #00b5ad;
         cursor: pointer; }
-        #main_rank .table_rank .table tr .friend_count {
-          background-color: #d4f0fd; }
-        #main_rank .table_rank .table tr .follower_count {
-          background-color: #d4f0fd; }
-        #main_rank .table_rank .table tr .ratio_count {
-          background-color: #d4f0fd; }
         #main_rank .table_rank .table tr th {
           text-align: center;
           width: 18%;
@@ -211,42 +192,23 @@
         background-color: #d4f0fd; }
 
 @media (min-width: 768px) {
+  #header_rank .order_change_btn {
+    top: 5%;
+    left: 10%; }
+    #header_rank .order_change_btn .change {
+      font-size: 1.2rem; }
   #header_rank .header_icon_title {
     width: 60%;
     margin: 0 auto; }
-    #header_rank .header_icon_title .change_btn {
-      margin-top: 60px; }
-      #header_rank .header_icon_title .change_btn .change {
-        font-size: 1.3rem; }
     #header_rank .header_icon_title .sub_title {
       font-size: 0.8rem; }
 
   #main_rank {
     font-size: 1.1rem; }
     #main_rank .table_rank {
-      width: 80%;
-      position: relative; }
-      #main_rank .table_rank .change_btn {
-        text-align: right;
-        margin-top: 1.5rem;
-        margin-right: 1.5rem;
-        display: block;
-        top: 60px; }
-        #main_rank .table_rank .change_btn .change {
-          display: inline-block;
-          padding: 0.4em 1.6em;
-          font-size: 1rem;
-          color: #00b5ad;
-          text-decoration: none;
-          user-select: none;
-          border: 1px #00b5ad solid;
-          border-radius: 20px;
-          transition: 0.4s ease; }
-        #main_rank .table_rank .change_btn .change:hover {
-          color: #fff;
-          background: #00b5ad; }
+      width: 80%; }
       #main_rank .table_rank .table {
-        margin-top: 50px; }
+        margin-top: 2%; }
         #main_rank .table_rank .table .heading {
           font-size: 1.7rem; } }
 #nav-toggle {
@@ -394,7 +356,49 @@
 
 @media (min-width: 768px) {
   #nav-toggle {
-    display: none; } }
+    top: 5%;
+    right: 10%; }
+    #nav-toggle div {
+      width: 80px; }
+      #nav-toggle div span:nth-child(1) {
+        top: 0px; }
+      #nav-toggle div span:nth-child(2) {
+        top: 30px; }
+      #nav-toggle div span:nth-child(3) {
+        top: 60px; }
+
+  #nav-toggle:hover span:nth-child(1) {
+    top: 5px; }
+  #nav-toggle:hover span:nth-child(3) {
+    top: 55px; }
+
+  .open #nav-toggle span {
+    background: #00b5ad; }
+    .open #nav-toggle span:nth-child(1) {
+      top: 40px;
+      transform: rotate(45deg); }
+    .open #nav-toggle span:nth-child(2) {
+      top: 40px;
+      width: 0;
+      left: 50%; }
+    .open #nav-toggle span:nth-child(3) {
+      top: 40px;
+      transform: rotate(-45deg); } }
+.change {
+  display: inline-block;
+  padding: 0.4em 1.6em;
+  font-size: 1.0rem;
+  color: #00b5ad;
+  text-decoration: none;
+  user-select: none;
+  border: 1px #00b5ad solid;
+  border-radius: 20px;
+  transition: 0.4s ease; }
+
+.change:hover {
+  color: #fff;
+  background: #00b5ad; }
+
 body {
   background-image: -webkit-linear-gradient(left, #f4f4f4 4%, #dfdedc 99%);
   background-image: linear-gradient(to right, #f4f4f4 4%, #dfdedc 99%); }

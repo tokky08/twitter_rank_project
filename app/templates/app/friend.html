@@ -11,12 +11,38 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.css">
     <link rel="stylesheet" href="{% static 'app/css/style.css' %}">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="{% static 'app/js/style.js' %}"></script>
 </head>
 
 
 <body>
     <header id="header_rank">
-
+        {% if request.path == "/friend_friend_rank_asc/" %}
+        <div class="change_btn order_change_btn">
+            <a href="{% url "friend_friend_rank_desc" %}" class="change">降順へ</a>
+        </div>
+        {% elif request.path == "/friend_friend_rank_desc/" %}
+        <div class="change_btn order_change_btn">
+            <a href="{% url "friend_friend_rank_asc" %}" class="change">昇順へ</a>
+        </div>
+        {% elif request.path == "/friend_follower_rank_asc/" %}
+        <div class="change_btn order_change_btn">
+            <a href="{% url "friend_follower_rank_desc" %}" class="change">降順へ</a>
+        </div>
+        {% elif request.path == "/friend_follower_rank_desc/" %}
+        <div class="change_btn order_change_btn">
+            <a href="{% url "friend_follower_rank_asc" %}" class="change">昇順へ</a>
+        </div>
+        {% elif request.path == "/friend_ratio_rank_asc/" %}
+        <div class="change_btn order_change_btn">
+            <a href="{% url "friend_ratio_rank_desc" %}" class="change">降順へ</a>
+        </div>
+        {% elif request.path == "/friend_ratio_rank_desc/" %}
+        <div class="change_btn order_change_btn">
+            <a href="{% url "friend_ratio_rank_asc" %}" class="change">昇順へ</a>
+        </div>
+        {% endif %}
         <div id="nav-toggle">
             <div>
                 <span></span>
@@ -24,7 +50,6 @@
                 <span></span>
             </div>
         </div>
-
         <div id="gloval-nav">
             <nav>
                 <ul>
@@ -34,7 +59,6 @@
                 </ul>
             </nav>
         </div>
-
         <div class="header_icon_title">
             <h1 class="icon_title"><img src="{% static "app/img/icon_title.png" %}"></h1>
             <p class="sub_title">あなたはフォローしている人達の中で何位?</p>
@@ -56,35 +80,6 @@
             <p class="friend_title">比率ランキング（降順）</p>
         {% endif%}
             <p class="rank">順位：{{ rank }}/{{ my_self_info.friends_count|add:"1" }}</p>
-
-            {% if request.path == "/friend_friend_rank_asc/" %}
-            <div class="change_btn">
-                <a href="{% url "friend_friend_rank_desc" %}" class="change">降順へ</a>
-            </div>
-            {% elif request.path == "/friend_friend_rank_desc/" %}
-            <div class="change_btn">
-                <a href="{% url "friend_friend_rank_asc" %}" class="change">昇順へ</a>
-            </div>
-            {% elif request.path == "/friend_follower_rank_asc/" %}
-            <div class="change_btn">
-                <a href="{% url "friend_follower_rank_desc" %}" class="change">降順へ</a>
-            </div>
-            {% elif request.path == "/friend_follower_rank_desc/" %}
-            <div class="change_btn">
-                <a href="{% url "friend_follower_rank_asc" %}" class="change">昇順へ</a>
-            </div>
-            {% elif request.path == "/friend_ratio_rank_asc/" %}
-            <div class="change_btn">
-                <a href="{% url "friend_ratio_rank_desc" %}" class="change">降順へ</a>
-            </div>
-            {% elif request.path == "/friend_ratio_rank_desc/" %}
-            <div class="change_btn">
-                <a href="{% url "friend_ratio_rank_asc" %}" class="change">昇順へ</a>
-            </div>
-            {% endif %}
-            
-            
-
 
             <table class="table">
                 <tr class="heading_colum">
@@ -136,7 +131,7 @@
                 <tr>
                     <td>{{ forloop.counter }}</td>
                     <td>
-                        <a href="https://twitter.com/{{ item.screen_name }}">
+                        <a href="https://twitter.com/{{ item.screen_name }}" class="scroll-fade">
                             <p class="icon"><img src="{{ item.profile_image_url_https }}"></p>
                             <p>{{ item.name }}</p>
                         </a>
@@ -162,24 +157,6 @@
             <table>
         </div>
     </main>
-
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-    <script>
-        (function($) {
-            $(function () {
-                $('#nav-toggle').on('click', function() {
-                $('body').toggleClass('open');
-                });
-            });
-            $(function () {
-                $('li').on('click', function() {
-                $('body').toggleClass('open');
-                });
-            });
-        })(jQuery);
-    </script>
-
-
 </body>
 
 </html>
