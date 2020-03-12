@@ -1,0 +1,8 @@
+@import "mixin";
+
+.change{
+    @include btn_white;
+}
+.change:hover{
+    @include btn_white_hover;
+}

@@ -107,6 +107,9 @@ def select_friend(request):
 def select_follower(request):
     return render(request, "app/select_follower.html")
 
+def index(request):
+    return render(request,"app/index.html")
+
 
 ####################################     フォローしている人/フォロワーの全情報をDBに格納     #########################################
 

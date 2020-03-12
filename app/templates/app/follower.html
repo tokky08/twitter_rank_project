@@ -11,6 +11,201 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.css">
     <link rel="stylesheet" href="{% static 'app/css/style.css' %}">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="{% static 'app/js/style.js' %}"></script>
+</head>
+
+
+<body>
+    <header id="header_rank">
+        {% if request.path == "/follower_friend_rank_asc/" %}
+        <div class="change_btn order_change_btn">
+            <a href="{% url "follower_friend_rank_desc" %}" class="change">降順へ</a>
+        </div>
+        {% elif request.path == "/follower_friend_rank_desc/" %}
+        <div class="change_btn order_change_btn">
+            <a href="{% url "follower_friend_rank_asc" %}" class="change">昇順へ</a>
+        </div>
+        {% elif request.path == "/follower_follower_rank_asc/" %}
+        <div class="change_btn order_change_btn">
+            <a href="{% url "follower_follower_rank_desc" %}" class="change">降順へ</a>
+        </div>
+        {% elif request.path == "/follower_follower_rank_desc/" %}
+        <div class="change_btn order_change_btn">
+            <a href="{% url "follower_follower_rank_asc" %}" class="change">昇順へ</a>
+        </div>
+        {% elif request.path == "/follower_ratio_rank_asc/" %}
+        <div class="change_btn order_change_btn">
+            <a href="{% url "follower_ratio_rank_desc" %}" class="change">降順へ</a>
+        </div>
+        {% elif request.path == "/follower_ratio_rank_desc/" %}
+        <div class="change_btn order_change_btn">
+            <a href="{% url "follower_ratio_rank_asc" %}" class="change">昇順へ</a>
+        </div>
+        {% endif %}
+        <div id="nav-toggle">
+            <div>
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+        <div id="gloval-nav">
+            <nav>
+                <ul>
+                    <li class="icon_img"><img src="{% static "app/img/icon_title.png" %}"></li>
+                    <li class="nav_content"><a href="{% url "index" %}">TOP</a></li>
+                    <li class="nav_content"><a href="{% url "friend_ratio_rank_desc" %}">フォローしている人達と比べる</a></li>
+                </ul>
+            </nav>
+        </div>
+        <div class="header_icon_title">
+            <h1 class="icon_title"><img src="{% static "app/img/icon_title.png" %}"></h1>
+            <p class="sub_title">あなたはフォロワー達の中で何位?</p>
+        </div>
+    </header>
+    <main id="main_rank">
+        <div class="table_rank">
+        {% if request.path == "/follower_friend_rank_asc/" %}
+            <p class="friend_title">フォロー数ランキング（昇順）</p>
+        {% elif request.path == "/follower_friend_rank_desc/" %}
+            <p class="friend_title">フォロー数ランキング（降順）</p>
+        {% elif request.path == "/follower_follower_rank_asc/" %}
+            <p class="friend_title">フォロワー数ランキング（昇順）</p>
+        {% elif request.path == "/follower_follower_rank_desc/" %}
+            <p class="friend_title">フォロワー数ランキング（降順）</p>
+        {% elif request.path == "/follower_ratio_rank_asc/" %}
+            <p class="friend_title">比率ランキング（昇順）</p>
+        {% elif request.path == "/follower_ratio_rank_desc/" %}
+            <p class="friend_title">比率ランキング（降順）</p>
+        {% endif%}
+            <p class="rank">順位：{{ rank }}/{{ my_self_info.followers_count|add:"1" }}</p>
+
+            <table class="table">
+                <tr class="heading_colum">
+                    <th>rank</th>
+                    <th>followers user</th>
+                {% if request.path == "/follower_friend_rank_asc/" or request.path == "/follower_friend_rank_desc/" %}
+                    <th class="heading">friend</th>
+                {% else %}
+                    <th><a href="{% url 'follower_friend_rank_desc' %}">friend</a></th>
+                {% endif%}
+                {% if request.path == "/follower_follower_rank_asc/" or request.path == "/follower_follower_rank_desc/" %}
+                    <th class="heading">follower</th>
+                {% else %}
+                    <th><a href="{% url 'follower_follower_rank_desc' %}">follower</a></th>
+                {% endif%}
+                {% if request.path == "/follower_ratio_rank_asc/" or request.path == "/follower_ratio_rank_desc/" %}
+                    <th class="heading">ratio</th>
+                {% else %}
+                    <th><a href="{% url 'follower_ratio_rank_desc' %}">ratio</a></th>
+                {% endif%}
+                </tr>
+                {% for item in follower %}
+                {% if item.screen_name == screen_name %}
+                <tr class="my_self_colum">
+                    <td>{{ forloop.counter }}</td>
+                    <td>
+                        <a href="https://twitter.com/{{ item.screen_name }}">
+                            <p class="icon"><img src="{{ item.profile_image_url_https }}"></p>
+                            <p>{{ item.name }}</p>
+                        </a>
+                    </td>
+                    {% if request.path == "/follower_friend_rank_asc/" or request.path == "/follower_friend_rank_desc/" %}
+                        <td class="selected_column">{{ item.friends_count }}</td>
+                    {% else %}
+                        <td>{{ item.friends_count }}</td>
+                    {% endif %}
+                    {% if request.path == "/follower_follower_rank_asc/" or request.path == "/follower_follower_rank_desc/" %}
+                        <td class="selected_column">{{ item.followers_count }}</td>
+                    {% else %}
+                        <td>{{ item.followers_count }}</td>
+                    {% endif %}
+                    {% if request.path == "/follower_ratio_rank_asc/" or request.path == "/follower_ratio_rank_desc/" %}
+                        <td class="selected_column">{{ item.ratio }}</td>
+                    {% else %}
+                        <td>{{ item.ratio }}</td>
+                    {% endif %}
+                </tr>
+                {% else%}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>
+                        <a href="https://twitter.com/{{ item.screen_name }}" class="scroll-fade">
+                            <p class="icon"><img src="{{ item.profile_image_url_https }}"></p>
+                            <p>{{ item.name }}</p>
+                        </a>
+                    </td>
+                    {% if request.path == "/follower_friend_rank_asc/" or request.path == "/follower_friend_rank_desc/" %}
+                        <td class="selected_column">{{ item.friends_count }}</td>
+                    {% else %}
+                        <td>{{ item.friends_count }}</td>
+                    {% endif %}
+                    {% if request.path == "/follower_follower_rank_asc/" or request.path == "/follower_follower_rank_desc/" %}
+                        <td class="selected_column">{{ item.followers_count }}</td>
+                    {% else %}
+                        <td>{{ item.followers_count }}</td>
+                    {% endif %}
+                    {% if request.path == "/follower_ratio_rank_asc/" or request.path == "/follower_ratio_rank_desc/" %}
+                        <td class="selected_column">{{ item.ratio }}</td>
+                    {% else %}
+                        <td>{{ item.ratio }}</td>
+                    {% endif %}
+                </tr>
+                {% endif %}
+                {% endfor %}
+            <table>
+        </div>
+    </main>
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% comment %} 
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Twitter Rnak</title>
+    <meta name="description" content="twitterでの相対的に順位を計算するアプリです">
+    <meta name="keywords" content="twitter, API, ランキング">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.css">
+    <link rel="stylesheet" href="{% static 'app/css/style.css' %}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 
@@ -74,4 +269,4 @@
 
 </body>
 
-</html>
+</html> {% endcomment %}
