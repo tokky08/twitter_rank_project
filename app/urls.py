@@ -23,8 +23,8 @@ urlpatterns = [
     path("follower_ratio_rank_asc/", views.follower_ratio_rank_asc, name="follower_ratio_rank_asc"),
     path("follower_ratio_rank_desc/", views.follower_ratio_rank_desc, name="follower_ratio_rank_desc"),
 
-    path("select_friend/", views.select_friend, name="select_friend"),
-    path("select_follower/", views.select_follower, name="select_follower"),
+    # path("select_friend/", views.select_friend, name="select_friend"),
+    # path("select_follower/", views.select_follower, name="select_follower"),
     path("", views.index, name="index"),
     # path("rank_friend/", views.rank_friend, name="rank_friend"),
     # path("rank_follower/", views.rank_follower, name="rank_follower"),

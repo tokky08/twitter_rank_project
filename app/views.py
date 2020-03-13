@@ -23,6 +23,10 @@ params = {
     "rank" : 0,
 }
 
+
+####################################     フォローしている人での昇順/降順への並び替え     #########################################
+
+##################       フォロー数     ##########################
 def friend_friend_rank_asc(request):
     params["friend"] = params["friend"].order_by("friends_count")
     friend_rank()
@@ -33,6 +37,7 @@ def friend_friend_rank_desc(request):
     friend_rank()
     return render(request, "app/friend.html", params)
 
+##################       フォロワー数     ##########################
 def friend_follower_rank_asc(request):
     params["friend"] = params["friend"].order_by("followers_count")
     friend_rank()
@@ -43,6 +48,7 @@ def friend_follower_rank_desc(request):
     friend_rank()
     return render(request, "app/friend.html", params)
 
+##################       比率        ##########################
 def friend_ratio_rank_asc(request):
     params["friend"] = params["friend"].order_by("ratio")
     friend_rank()
@@ -53,6 +59,20 @@ def friend_ratio_rank_desc(request):
     friend_rank()
     return render(request, "app/friend.html", params)
 
+##################       自分の順位       ##########################
+def friend_rank():
+    params["rank"] = 0
+    for screen_name in params["friend"]:
+        params["rank"] += 1
+        if screen_name.screen_name == params["screen_name"]:
+            break
+    return params["rank"]
+
+
+####################################     フォロワーでの昇順/降順への並び替え     #########################################
+
+
+##################       フォロー数     ##########################
 def follower_friend_rank_asc(request):
     params["follower"] = params["follower"].order_by("friends_count")
     follower_rank()
@@ -63,6 +83,7 @@ def follower_friend_rank_desc(request):
     follower_rank()
     return render(request, "app/follower.html", params)
 
+##################       フォロワー数     ##########################
 def follower_follower_rank_asc(request):
     params["follower"] = params["follower"].order_by("followers_count")
     follower_rank()
@@ -73,6 +94,7 @@ def follower_follower_rank_desc(request):
     follower_rank()
     return render(request, "app/follower.html", params)
 
+##################       比率        ##########################
 def follower_ratio_rank_asc(request):
     params["follower"] = params["follower"].order_by("ratio")
     follower_rank()
@@ -83,15 +105,7 @@ def follower_ratio_rank_desc(request):
     follower_rank()
     return render(request, "app/follower.html", params)
 
-
-def friend_rank():
-    params["rank"] = 0
-    for screen_name in params["friend"]:
-        params["rank"] += 1
-        if screen_name.screen_name == params["screen_name"]:
-            break
-    return params["rank"]
-
+##################       自分の順位       ##########################
 def follower_rank():
     params["rank"] = 0
     for screen_name in params["follower"]:
@@ -101,11 +115,6 @@ def follower_rank():
     return params["rank"]
 
 
-def select_friend(request):
-    return render(request, "app/select_friend.html")
-
-def select_follower(request):
-    return render(request, "app/select_follower.html")
 
 def index(request):
     return render(request,"app/index.html")
