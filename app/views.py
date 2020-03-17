@@ -18,9 +18,6 @@ params = {
     "my_self_info" : "",
     "screen_name": "",
     "form": HelloForm(),
-    "friend": "",
-    "follower": "",
-    "rank" : 0,
 }
 
 
@@ -28,45 +25,93 @@ params = {
 
 ##################       フォロー数     ##########################
 def friend_friend_rank_asc(request):
-    params["friend"] = params["friend"].order_by("friends_count")
-    friend_rank()
-    return render(request, "app/friend.html", params)
+    response = {
+        "my_self_info": "",
+        "screen_name": "",
+        "friend" : "",
+        "rank" : 0,
+    }
+    response["my_self_info"] = params["my_self_info"]
+    response["screen_name"] = params["screen_name"]
+    response["friend"] = Friend_Info.objects.filter(my_screen_name=params["screen_name"]).order_by("friends_count")
+    response["rank"] = friend_rank(response["friend"])
+    return render(request, "app/friend.html", response)
 
 def friend_friend_rank_desc(request):
-    params["friend"] = params["friend"].order_by("friends_count").reverse()
-    friend_rank()
-    return render(request, "app/friend.html", params)
+    response = {
+        "my_self_info": "",
+        "screen_name": "",
+        "friend" : "",
+        "rank" : 0,
+    }
+    response["my_self_info"] = params["my_self_info"]
+    response["screen_name"] = params["screen_name"]
+    response["friend"] = Friend_Info.objects.filter(my_screen_name=params["screen_name"]).order_by("-friends_count")
+    response["rank"] = friend_rank(response["friend"])
+    return render(request, "app/friend.html", response)
 
 ##################       フォロワー数     ##########################
 def friend_follower_rank_asc(request):
-    params["friend"] = params["friend"].order_by("followers_count")
-    friend_rank()
-    return render(request, "app/friend.html", params)
+    response = {
+        "my_self_info": "",
+        "screen_name": "",
+        "friend" : "",
+        "rank" : 0,
+    }
+    response["my_self_info"] = params["my_self_info"]
+    response["screen_name"] = params["screen_name"]
+    response["friend"] = Friend_Info.objects.filter(my_screen_name=params["screen_name"]).order_by("followers_count")
+    response["rank"] = friend_rank(response["friend"])
+    return render(request, "app/friend.html", response)
 
 def friend_follower_rank_desc(request):
-    params["friend"] = params["friend"].order_by("followers_count").reverse()
-    friend_rank()
-    return render(request, "app/friend.html", params)
+    response = {
+        "my_self_info": "",
+        "screen_name": "",
+        "friend" : "",
+        "rank" : 0,
+    }
+    response["my_self_info"] = params["my_self_info"]
+    response["screen_name"] = params["screen_name"]
+    response["friend"] = Friend_Info.objects.filter(my_screen_name=params["screen_name"]).order_by("-followers_count")
+    response["rank"] = friend_rank(response["friend"])
+    return render(request, "app/friend.html", response)
 
 ##################       比率        ##########################
 def friend_ratio_rank_asc(request):
-    params["friend"] = params["friend"].order_by("ratio")
-    friend_rank()
-    return render(request, "app/friend.html", params)
+    response = {
+        "my_self_info": "",
+        "screen_name": "",
+        "friend" : "",
+        "rank" : 0,
+    }
+    response["my_self_info"] = params["my_self_info"]
+    response["screen_name"] = params["screen_name"]
+    response["friend"] = Friend_Info.objects.filter(my_screen_name=params["screen_name"]).order_by("ratio")
+    response["rank"] = friend_rank(response["friend"])
+    return render(request, "app/friend.html", response)
 
 def friend_ratio_rank_desc(request):
-    params["friend"] = params["friend"].order_by("ratio").reverse()
-    friend_rank()
-    return render(request, "app/friend.html", params)
+    response = {
+        "my_self_info": "",
+        "screen_name": "",
+        "friend" : "",
+        "rank" : 0,
+    }
+    response["my_self_info"] = params["my_self_info"]
+    response["screen_name"] = params["screen_name"]
+    response["friend"] = Friend_Info.objects.filter(my_screen_name=params["screen_name"]).order_by("-ratio")
+    response["rank"] = friend_rank(response["friend"])
+    return render(request, "app/friend.html", response)
 
 ##################       自分の順位       ##########################
-def friend_rank():
-    params["rank"] = 0
-    for screen_name in params["friend"]:
-        params["rank"] += 1
+def friend_rank(friend):
+    rank = 0
+    for screen_name in friend:
+        rank += 1
         if screen_name.screen_name == params["screen_name"]:
             break
-    return params["rank"]
+    return rank
 
 
 ####################################     フォロワーでの昇順/降順への並び替え     #########################################
@@ -74,45 +119,93 @@ def friend_rank():
 
 ##################       フォロー数     ##########################
 def follower_friend_rank_asc(request):
-    params["follower"] = params["follower"].order_by("friends_count")
-    follower_rank()
-    return render(request, "app/follower.html", params)
+    response = {
+        "my_self_info": "",
+        "screen_name": "",
+        "follower" : "",
+        "rank" : 0,
+    }
+    response["my_self_info"] = params["my_self_info"]
+    response["screen_name"] = params["screen_name"]
+    response["follower"] = Follower_Info.objects.filter(my_screen_name=params["screen_name"]).order_by("friends_count")
+    response["rank"] = follower_rank(response["follower"])
+    return render(request, "app/follower.html", response)
 
 def follower_friend_rank_desc(request):
-    params["follower"] = params["follower"].order_by("friends_count").reverse()
-    follower_rank()
-    return render(request, "app/follower.html", params)
+    response = {
+        "my_self_info": "",
+        "screen_name": "",
+        "follower" : "",
+        "rank" : 0,
+    }
+    response["my_self_info"] = params["my_self_info"]
+    response["screen_name"] = params["screen_name"]
+    response["follower"] = Follower_Info.objects.filter(my_screen_name=params["screen_name"]).order_by("-friends_count")
+    response["rank"] = follower_rank(response["follower"])
+    return render(request, "app/follower.html", response)
 
 ##################       フォロワー数     ##########################
 def follower_follower_rank_asc(request):
-    params["follower"] = params["follower"].order_by("followers_count")
-    follower_rank()
-    return render(request, "app/follower.html", params)
+    response = {
+        "my_self_info": "",
+        "screen_name": "",
+        "follower" : "",
+        "rank" : 0,
+    }
+    response["my_self_info"] = params["my_self_info"]
+    response["screen_name"] = params["screen_name"]
+    response["follower"] = Follower_Info.objects.filter(my_screen_name=params["screen_name"]).order_by("followers_count")
+    response["rank"] = follower_rank(response["follower"])
+    return render(request, "app/follower.html", response)
 
 def follower_follower_rank_desc(request):
-    params["follower"] = params["follower"].order_by("followers_count").reverse()
-    follower_rank()
-    return render(request, "app/follower.html", params)
+    response = {
+        "my_self_info": "",
+        "screen_name": "",
+        "follower" : "",
+        "rank" : 0,
+    }
+    response["my_self_info"] = params["my_self_info"]
+    response["screen_name"] = params["screen_name"]
+    response["follower"] = Follower_Info.objects.filter(my_screen_name=params["screen_name"]).order_by("-followers_count")
+    response["rank"] = follower_rank(response["follower"])
+    return render(request, "app/follower.html", response)
 
 ##################       比率        ##########################
 def follower_ratio_rank_asc(request):
-    params["follower"] = params["follower"].order_by("ratio")
-    follower_rank()
-    return render(request, "app/follower.html", params)
+    response = {
+        "my_self_info": "",
+        "screen_name": "",
+        "follower" : "",
+        "rank" : 0,
+    }
+    response["my_self_info"] = params["my_self_info"]
+    response["screen_name"] = params["screen_name"]
+    response["follower"] = Follower_Info.objects.filter(my_screen_name=params["screen_name"]).order_by("ratio")
+    response["rank"] = follower_rank(response["follower"])
+    return render(request, "app/follower.html", response)
 
 def follower_ratio_rank_desc(request):
-    params["follower"] = params["follower"].order_by("ratio").reverse()
-    follower_rank()
-    return render(request, "app/follower.html", params)
+    response = {
+        "my_self_info": "",
+        "screen_name": "",
+        "follower" : "",
+        "rank" : 0,
+    }
+    response["my_self_info"] = params["my_self_info"]
+    response["screen_name"] = params["screen_name"]
+    response["follower"] = Follower_Info.objects.filter(my_screen_name=params["screen_name"]).order_by("-ratio")
+    response["rank"] = follower_rank(response["follower"])
+    return render(request, "app/follower.html", response)
 
 ##################       自分の順位       ##########################
-def follower_rank():
-    params["rank"] = 0
-    for screen_name in params["follower"]:
-        params["rank"] += 1
+def follower_rank(follower):
+    rank = 0
+    for screen_name in follower:
+        rank += 1
         if screen_name.screen_name == params["screen_name"]:
             break
-    return params["rank"]
+    return rank
 
 
 
@@ -133,11 +226,9 @@ def info_get(request):
         my_self_info = api.get_user(screen_name=params["screen_name"])
         params["my_self_info"] = my_self_info
 
-        # fridnd_info_get(my_screen_name, my_self_info)
-        # follower_info_get(my_screen_name, my_self_info)
+        fridnd_info_save(my_screen_name, my_self_info)
+        follower_info_save(my_screen_name, my_self_info)
 
-        params["friend"] = Friend_Info.objects.filter(my_screen_name=my_screen_name)
-        params["follower"] = Follower_Info.objects.filter(my_screen_name=my_screen_name)
 
         return render(request, "app/select.html", params)
 
@@ -150,7 +241,7 @@ def info_get(request):
 
 ####################################     フォローしている人の情報をDBに格納     #########################################
 
-def fridnd_info_get(my_screen_name, my_self_info):
+def fridnd_info_save(my_screen_name, my_self_info):
 
     ############          フォローしている人の情報をlistにして取得          ###################
     friends_icon_list = friend_icon(my_screen_name, my_self_info)
@@ -187,15 +278,14 @@ def fridnd_info_get(my_screen_name, my_self_info):
 
         friend_info.save()
     
-    params["friend"] = Friend_Info.objects.all()
-
+    
 
 
 
 
 ####################################     フォロワーの情報をDBに格納     #########################################
 
-def follower_info_get(my_screen_name, my_self_info):
+def follower_info_save(my_screen_name, my_self_info):
 
     ############          フォロワーの情報をlistにして取得          ###################
     followers_icon_list = follower_icon(my_screen_name, my_self_info)
@@ -232,8 +322,7 @@ def follower_info_get(my_screen_name, my_self_info):
 
         follower_info.save()
     
-    params["follower"] = Follower_Info.objects.all()
-
+    
 
 
 ####################################     フォローしている人の情報取得     #########################################

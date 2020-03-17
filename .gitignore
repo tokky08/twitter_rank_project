@@ -1,1 +1,4 @@
 app/api_key.py
+*pyc
+db.sqlite3
+app/__pycache__
