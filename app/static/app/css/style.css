@@ -32,7 +32,8 @@
       #main_top #form .input #id_screen_name {
         border: 1px solid #000;
         font-size: 20px;
-        border-radius: 5px; }
+        border-radius: 5px;
+        text-align: center; }
     #main_top #form .btn {
       width: 100px;
       margin: 0 auto;
@@ -43,6 +44,11 @@
         border: 1px solid #000;
         font-size: 20px;
         border-radius: 5px; }
+  #main_top #bird {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 10%; }
 
 @media (min-width: 768px) {
   #main_top {
