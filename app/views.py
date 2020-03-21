@@ -20,6 +20,31 @@ params = {
     "form": HelloForm(),
 }
 
+# class User_Info:
+#     def __init__(self, screen_name, my_self_info, form):
+#         self.screen_name = screen_name
+#         self.my_self_info = my_self_info
+#         self.form = form
+
+    # def user_info(request):
+
+    #     screen_name = request.POST["screen_name"]
+    #     my_self_info = api.get_user(screen_name=screen_name)
+    #     form = HelloForm(request.POST)
+    #     user_info = User_Info(screen_name, my_self_info, form)
+
+    #     return user_info
+
+    # def info_get(request):
+
+    #     if (request.method == "POST"):
+    #         user_info = user_info(request)
+
+    #         return render(request, "app/select.html", {"user_info" : user_info})
+
+    #     else:
+    #         return render(request, "app/index.html", params)
+
 
 ####################################     フォローしている人での昇順/降順への並び替え     #########################################
 
@@ -33,8 +58,7 @@ def friend_friend_rank_asc(request):
     }
     response["my_self_info"] = params["my_self_info"]
     response["screen_name"] = params["screen_name"]
-    response["friend"] = Friend_Info.objects.filter(
-        my_screen_name=params["screen_name"]).order_by("friends_count")
+    response["friend"] = Friend_Info.objects.filter(my_screen_name=params["screen_name"]).order_by("friends_count")
     response["rank"] = friend_rank(response["friend"])
     return render(request, "app/friend.html", response)
 
@@ -65,8 +89,7 @@ def friend_follower_rank_asc(request):
     }
     response["my_self_info"] = params["my_self_info"]
     response["screen_name"] = params["screen_name"]
-    response["friend"] = Friend_Info.objects.filter(
-        my_screen_name=params["screen_name"]).order_by("followers_count")
+    response["friend"] = Friend_Info.objects.filter(my_screen_name=params["screen_name"]).order_by("followers_count")
     response["rank"] = friend_rank(response["friend"])
     return render(request, "app/friend.html", response)
 
@@ -110,10 +133,10 @@ def friend_ratio_rank_desc(request):
         "friend": "",
         "rank": 0,
     }
-    response["my_self_info"] = params["my_self_info"]
-    response["screen_name"] = params["screen_name"]
-    response["friend"] = Friend_Info.objects.filter(
-        my_screen_name=params["screen_name"]).order_by("-ratio")
+    user_info = info_get(request)
+    response["my_self_info"] = user_info.my_self_info#params["my_self_info"]
+    response["screen_name"] = user_info.screen_name#params["screen_name"]
+    response["friend"] = Friend_Info.objects.filter(my_screen_name=params["screen_name"]).order_by("-ratio")
     response["rank"] = friend_rank(response["friend"])
     return render(request, "app/friend.html", response)
 
@@ -242,26 +265,69 @@ def index(request):
     return render(request, "app/index.html")
 
 
+
+
 ####################################     フォローしている人/フォロワーの全情報をDBに格納     #########################################
+
+# def user_info(request):
+
+#     screen_name = request.POST["screen_name"]
+#     my_self_info = api.get_user(screen_name=screen_name)
+#     form = HelloForm(request.POST)
+#     user_info = User_Info(screen_name, my_self_info, form)
+
+#     return user_info
 
 def info_get(request):
 
+    user_info = {
+        "screen_name" : "",
+        "my_self_info" : "",
+        "form" : HelloForm(),
+    }
+
     if (request.method == "POST"):
 
-        params["screen_name"] = request.POST["screen_name"]
-        params["form"] = HelloForm(request.POST)
+        user_info["screen_name"] = request.POST["screen_name"]
+        user_info["my_self_info"] = api.get_user(screen_name=user_info["screen_name"])
+        user_info["form"] = HelloForm(request.POST)
 
-        my_screen_name = params["screen_name"]
-        my_self_info = api.get_user(screen_name=params["screen_name"])
-        params["my_self_info"] = my_self_info
-
-        fridnd_info_save(my_screen_name, my_self_info)
-        follower_info_save(my_screen_name, my_self_info)
-
-        return render(request, "app/select.html", params)
+        # user_info = user_info(request)
+        # fridnd_info_save(user_info.screen_name, user_info.my_self_info)
+        # follower_info_save(user_info.my_screen_name, user_info.my_self_info)
+        return render(request, "app/select.html", user_info)
 
     else:
-        return render(request, "app/index.html", params)
+        return render(request, "app/index.html", user_info)
+
+
+
+# def info_get(request):
+
+#     if (request.method == "POST"):
+
+#         screen_name = request.POST["screen_name"]
+#         my_self_info = api.get_user(screen_name=screen_name)
+#         form = HelloForm(request.POST)
+
+#         user_info = User_Info(screen_name, my_self_info, form)
+
+#         # params["screen_name"] = request.POST["screen_name"]
+#         # params["form"] = HelloForm(request.POST)
+
+#         # my_screen_name = params["screen_name"]
+#         # my_self_info = api.get_user(screen_name=params["screen_name"])
+#         # params["my_self_info"] = my_self_info
+
+#         # screen_name = request.GET['screen_name']
+
+#         # fridnd_info_save(my_screen_name, my_self_info)
+#         # follower_info_save(my_screen_name, my_self_info)
+
+#         return render(request, "app/select.html", {"user_info" : user_info})
+
+#     else:
+#         return render(request, "app/index.html", params)
 
 
 ####################################     フォローしている人の情報をDBに格納     #########################################
@@ -277,6 +343,8 @@ def fridnd_info_save(my_screen_name, my_self_info):
     friends_friends_count_list = friend_friends_count(friends_info_list)
     friends_followers_count_list = friend_followers_count(friends_info_list)
     friends_ratio_list = friend_ratio(my_self_info, friends_info_list)
+
+    #########     今回は使わないが追加したい時にコメントを外す     ###########
     # friends_statuses_count_list = friend_statuses_count(friends_info_list)
     # friends_created_at_list = friend_created_at(friends_info_list)
     # friends_description_list = friend_description(friends_info_list)
@@ -296,10 +364,13 @@ def fridnd_info_save(my_screen_name, my_self_info):
             friends_count=friends_friends_count_list[i],
             followers_count=friends_followers_count_list[i],
             ratio=friends_ratio_list[i],
-            statuses_count=0,  # friends_statuses_count_list[i],
-            created_at="2020-03-08",  # friends_created_at_list[i],
-            description="NO",  # friends_description_list[i],
-            favourites_count=0,  # friends_favourites_count_list[i]
+
+            #########     今回は使わないが追加したい時にコメントを外す     ###########
+            # statuses_count=friends_statuses_count_list[i],
+            # created_at=friends_created_at_list[i],
+            # description=friends_description_list[i],
+            # favourites_count=friends_favourites_count_list[i]
+
         )
 
         friend_info.save()
@@ -316,9 +387,10 @@ def follower_info_save(my_screen_name, my_self_info):
     followers_screen_name_list = follower_screen_name(followers_info_list)
     followers_ids_list = follower_ids(my_screen_name, my_self_info)
     followers_friends_count_list = follower_friends_count(followers_info_list)
-    followers_followers_count_list = follower_followers_count(
-        followers_info_list)
+    followers_followers_count_list = follower_followers_count(followers_info_list)
     followers_ratio_list = follower_ratio(my_self_info, followers_info_list)
+
+    #########     今回は使わないが追加したい時にコメントを外す     ###########
     # followers_statuses_count_list = follower_statuses_count(followers_info_list)
     # followers_created_at_list = follower_created_at(followers_info_list)
     # followers_description_list = follower_description(followers_info_list)
@@ -338,10 +410,12 @@ def follower_info_save(my_screen_name, my_self_info):
             friends_count=followers_friends_count_list[i],
             followers_count=followers_followers_count_list[i],
             ratio=followers_ratio_list[i],
-            statuses_count=0,  # followers_statuses_count_list[i],
-            created_at="2020-03-08",  # followers_created_at_list[i],
-            description="NO",  # followers_description_list[i],
-            favourites_count=0,  # followers_favourites_count_list[i]
+
+            #########     今回は使わないが追加したい時にコメントを外す     ###########
+            # statuses_count=followers_statuses_count_list[i],
+            # created_at=followers_created_at_list[i],
+            # description=followers_description_list[i],
+            # favourites_count=followers_favourites_count_list[i]
         )
 
         follower_info.save()
