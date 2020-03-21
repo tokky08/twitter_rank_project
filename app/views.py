@@ -310,20 +310,19 @@ def fridnd_info_save(my_screen_name, my_self_info):
 def follower_info_save(my_screen_name, my_self_info):
 
     ############          フォロワーの情報をlistにして取得          ###################
-    followers_icon_list = follower_icon(my_screen_name, my_self_info)
-    followers_name_list = follower_name(my_screen_name, my_self_info)
-    followers_screen_name_list = follower_screen_name(
-        my_screen_name, my_self_info)
+    followers_info_list = followers_info(my_screen_name, my_self_info)
+    followers_icon_list = follower_icon(followers_info_list)
+    followers_name_list = follower_name(followers_info_list)
+    followers_screen_name_list = follower_screen_name(followers_info_list)
     followers_ids_list = follower_ids(my_screen_name, my_self_info)
-    followers_friends_count_list = follower_friends_count(
-        my_screen_name, my_self_info)
+    followers_friends_count_list = follower_friends_count(followers_info_list)
     followers_followers_count_list = follower_followers_count(
-        my_screen_name, my_self_info)
-    followers_ratio_list = follower_ratio(my_screen_name, my_self_info)
-    # followers_statuses_count_list = follower_statuses_count(my_screen_name, my_self_info)
-    # followers_created_at_list = follower_created_at(my_screen_name, my_self_info)
-    # followers_description_list = follower_description(my_screen_name, my_self_info)
-    # followers_favourites_count_list = follower_favourites_count(my_screen_name, my_self_info)
+        followers_info_list)
+    followers_ratio_list = follower_ratio(my_self_info, followers_info_list)
+    # followers_statuses_count_list = follower_statuses_count(followers_info_list)
+    # followers_created_at_list = follower_created_at(followers_info_list)
+    # followers_description_list = follower_description(followers_info_list)
+    # followers_favourites_count_list = follower_favourites_count(followers_info_list)
 
     # 前のデータを全消去する
     Follower_Info.objects.filter(my_screen_name=params["screen_name"]).delete()
@@ -494,39 +493,45 @@ def friend_favourites_count(friends_info_list):
 
 ####################################     フォロワーの情報取得     #########################################
 
-
-##########   フォロワーのiconをlistに格納   ##########
-def follower_icon(my_screen_name, my_self_info):
+##########   フォロワーの情報をlistに格納   ##########
+def followers_info(my_screen_name, my_self_info):
 
     followers_ids_list = follower_ids(my_screen_name, my_self_info)
-    followers_icon_list = []
+    followers_info_list = []
     for follower_id in followers_ids_list:
         follower = api.get_user(id=follower_id)
-        followers_icon_list.append(follower.profile_image_url_https)
+        followers_info_list.append(follower)
+
+    return followers_info_list
+
+##########   フォロワーのiconをlistに格納   ##########
+
+
+def follower_icon(followers_info_list):
+
+    followers_icon_list = []
+    for follower_info in followers_info_list:
+        followers_icon_list.append(follower_info.profile_image_url_https)
 
     return followers_icon_list
 
 
 ##########   フォロワーのnameをlistに格納   ##########
-def follower_name(my_screen_name, my_self_info):
+def follower_name(followers_info_list):
 
-    followers_ids_list = follower_ids(my_screen_name, my_self_info)
     followers_name_list = []
-    for follower_id in followers_ids_list:
-        follower = api.get_user(id=follower_id)
-        followers_name_list.append(follower.name)
+    for follower_info in followers_info_list:
+        followers_name_list.append(follower_info.name)
 
     return followers_name_list
 
 
 ##########   フォロワーのscreen_nameをlistに格納   ##########
-def follower_screen_name(my_screen_name, my_self_info):
+def follower_screen_name(followers_info_list):
 
-    followers_ids_list = follower_ids(my_screen_name, my_self_info)
     followers_screen_name_list = []
-    for follower_id in followers_ids_list:
-        follower = api.get_user(id=follower_id)
-        followers_screen_name_list.append(follower.screen_name)
+    for follower_info in followers_info_list:
+        followers_screen_name_list.append(follower_info.screen_name)
 
     return followers_screen_name_list
 
@@ -547,36 +552,31 @@ def follower_ids(my_screen_name, my_self_info):
 
 
 ##########   フォロワーのフォロー数をlistに格納   ##########
-def follower_friends_count(my_screen_name, my_self_info):
+def follower_friends_count(followers_info_list):
 
-    followers_ids_list = follower_ids(my_screen_name, my_self_info)
     followers_friends_count_list = []
-    for follower_id in followers_ids_list:
-        follower = api.get_user(id=follower_id)
-        followers_friends_count_list.append(follower.friends_count)
+    for follower_info in followers_info_list:
+        followers_friends_count_list.append(follower_info.friends_count)
 
     return followers_friends_count_list
 
 
 ##########   フォロワーのフォロワー数をlistに格納   ##########
-def follower_followers_count(my_screen_name, my_self_info):
+def follower_followers_count(followers_info_list):
 
-    followers_ids_list = follower_ids(my_screen_name, my_self_info)
     followers_followers_count_list = []
-    for follower_id in followers_ids_list:
-        follower = api.get_user(id=follower_id)
-        followers_followers_count_list.append(follower.followers_count)
+    for follower_info in followers_info_list:
+        followers_followers_count_list.append(follower_info.followers_count)
 
     return followers_followers_count_list
 
 
 ##########   フォロワーのフォロワー数/フォロー数の比率をlistに格納   ##########
-def follower_ratio(my_screen_name, my_self_info):
+def follower_ratio(my_self_info, followers_info_list):
 
     followers_followers_count_list = follower_followers_count(
-        my_screen_name, my_self_info)
-    followers_friends_count_list = follower_friends_count(
-        my_screen_name, my_self_info)
+        followers_info_list)
+    followers_friends_count_list = follower_friends_count(followers_info_list)
 
     try:
         follower_ratio_list = []
@@ -597,48 +597,40 @@ def follower_ratio(my_screen_name, my_self_info):
 
 
 ##########   フォロワーのツイート数をlistに格納   ##########
-def follower_statuses_count(my_screen_name, my_self_info):
+def follower_statuses_count(followers_info_list):
 
-    followers_ids_list = follower_ids(my_screen_name, my_self_info)
     followers_statuses_count_list = []
-    for follower_id in followers_ids_list:
-        follower = api.get_user(id=follower_id)
-        followers_statuses_count_list.append(follower.statuses_count)
+    for follower_info in followers_info_list:
+        followers_statuses_count_list.append(follower_info.statuses_count)
 
     return followers_statuses_count_list
 
 
 ##########   フォロワーのアカウント作成日時をlistに格納   ##########
-def follower_created_at(my_screen_name, my_self_info):
+def follower_created_at(followers_info_list):
 
-    followers_ids_list = follower_ids(my_screen_name, my_self_info)
     followers_created_at_list = []
-    for follower_id in followers_ids_list:
-        follower = api.get_user(id=follower_id)
-        followers_created_at_list.append(follower.created_at)
+    for follower_info in followers_info_list:
+        followers_created_at_list.append(follower_info.created_at)
 
     return followers_created_at_list
 
 
 ##########   フォロワーのプロフィール詳細文をlistに格納   ##########
-def follower_description(my_screen_name, my_self_info):
+def follower_description(followers_info_list):
 
-    followers_ids_list = follower_ids(my_screen_name, my_self_info)
     followers_description_list = []
-    for follower_id in followers_ids_list:
-        follower = api.get_user(id=follower_id)
-        followers_description_list.append(follower.description)
+    for follower_info in followers_info_list:
+        followers_description_list.append(follower_info.description)
 
     return followers_description_list
 
 
 ##########   フォロワーのいいね数をlistに格納   ##########
-def follower_favourites_count(my_screen_name, my_self_info):
+def follower_favourites_count(followers_info_list):
 
-    followers_ids_list = follower_ids(my_screen_name, my_self_info)
     followers_favourites_count_list = []
-    for follower_id in followers_ids_list:
-        follower = api.get_user(id=follower_id)
-        followers_favourites_count_list.append(follower.favourites_count)
+    for follower_info in followers_info_list:
+        followers_favourites_count_list.append(follower_info.favourites_count)
 
     return followers_favourites_count_list
