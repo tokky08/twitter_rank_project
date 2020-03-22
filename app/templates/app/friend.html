@@ -55,7 +55,7 @@
                 <ul>
                     <li class="icon_img"><img src="{% static "app/img/icon_title.png" %}"></li>
                     <li class="nav_content"><a href="{% url "index" %}">TOP</a></li>
-                    <li class="nav_content"><a href="{% url "follower_ratio_rank_desc" %}">フォロワーと比べる</a></li>
+                    <li class="nav_content"><a href="{% url "follower_ratio_rank_desc" %}?screen_name={{request.GET.screen_name}}&my_self_info={{request.GET.my_self_info}}">フォロワーと比べる</a></li>
                 </ul>
             </nav>
         </div>

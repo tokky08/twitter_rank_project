@@ -17,13 +17,6 @@ auth.set_access_token(ACCESS_TOKEN, ACCESS_TOKEN_SECRET)
 api = tweepy.API(auth, wait_on_rate_limit=True)
 
 
-params = {
-    "my_self_info": "",
-    "screen_name": "",
-    "form": HelloForm(),
-}
-
-
 ####################################     フォローしている人での昇順/降順への並び替え     #########################################
 
 ##################       フォロー数     ##########################
@@ -150,11 +143,13 @@ def follower_friend_rank_asc(request):
         "screen_name": "",
         "follower": "",
         "rank": 0,
+        "all_users_count": 0,
     }
-    response["my_self_info"] = params["my_self_info"]
-    response["screen_name"] = params["screen_name"]
-    response["follower"] = Follower_Info.objects.filter(my_screen_name=params["screen_name"]).order_by("friends_count")
-    response["rank"] = follower_rank(response["follower"])
+    response["my_self_info"] = request.GET.get("my_self_info")
+    response["screen_name"] = request.GET.get("screen_name")
+    response["follower"] = Follower_Info.objects.filter(my_screen_name=response["screen_name"]).order_by("friends_count")
+    response["rank"] = follower_rank(request, response["follower"])
+    response["all_users_count"] = all_users_count(response["follower"])
     return render(request, "app/follower.html", response)
 
 
@@ -164,11 +159,13 @@ def follower_friend_rank_desc(request):
         "screen_name": "",
         "follower": "",
         "rank": 0,
+        "all_users_count": 0,
     }
-    response["my_self_info"] = params["my_self_info"]
-    response["screen_name"] = params["screen_name"]
-    response["follower"] = Follower_Info.objects.filter(my_screen_name=params["screen_name"]).order_by("-friends_count")
-    response["rank"] = follower_rank(response["follower"])
+    response["my_self_info"] =request.GET.get("my_self_info")
+    response["screen_name"] = request.GET.get("screen_name")
+    response["follower"] = Follower_Info.objects.filter(my_screen_name=response["screen_name"]).order_by("-friends_count")
+    response["rank"] = follower_rank(request, response["follower"])
+    response["all_users_count"] = all_users_count(response["follower"])
     return render(request, "app/follower.html", response)
 
 ##################       フォロワー数     ##########################
@@ -180,11 +177,13 @@ def follower_follower_rank_asc(request):
         "screen_name": "",
         "follower": "",
         "rank": 0,
+        "all_users_count": 0,
     }
-    response["my_self_info"] = params["my_self_info"]
-    response["screen_name"] = params["screen_name"]
-    response["follower"] = Follower_Info.objects.filter(my_screen_name=params["screen_name"]).order_by("followers_count")
-    response["rank"] = follower_rank(response["follower"])
+    response["my_self_info"] = request.GET.get("my_self_info")
+    response["screen_name"] = request.GET.get("screen_name")
+    response["follower"] = Follower_Info.objects.filter(my_screen_name=response["screen_name"]).order_by("followers_count")
+    response["rank"] = follower_rank(request, response["follower"])
+    response["all_users_count"] = all_users_count(response["follower"])
     return render(request, "app/follower.html", response)
 
 
@@ -194,11 +193,13 @@ def follower_follower_rank_desc(request):
         "screen_name": "",
         "follower": "",
         "rank": 0,
+        "all_users_count": 0,
     }
-    response["my_self_info"] = params["my_self_info"]
-    response["screen_name"] = params["screen_name"]
-    response["follower"] = Follower_Info.objects.filter(my_screen_name=params["screen_name"]).order_by("-followers_count")
-    response["rank"] = follower_rank(response["follower"])
+    response["my_self_info"] = request.GET.get("my_self_info")
+    response["screen_name"] = request.GET.get("screen_name")
+    response["follower"] = Follower_Info.objects.filter(my_screen_name=response["screen_name"]).order_by("-followers_count")
+    response["rank"] = follower_rank(request, response["follower"])
+    response["all_users_count"] = all_users_count(response["follower"])
     return render(request, "app/follower.html", response)
 
 ##################       比率        ##########################
@@ -210,11 +211,13 @@ def follower_ratio_rank_asc(request):
         "screen_name": "",
         "follower": "",
         "rank": 0,
+        "all_users_count": 0,
     }
-    response["my_self_info"] = params["my_self_info"]
-    response["screen_name"] = params["screen_name"]
-    response["follower"] = Follower_Info.objects.filter(my_screen_name=params["screen_name"]).order_by("ratio")
-    response["rank"] = follower_rank(response["follower"])
+    response["my_self_info"] = request.GET.get("my_self_info")
+    response["screen_name"] = request.GET.get("screen_name")
+    response["follower"] = Follower_Info.objects.filter(my_screen_name=response["screen_name"]).order_by("ratio")
+    response["rank"] = follower_rank(request, response["follower"])
+    response["all_users_count"] = all_users_count(response["follower"])
     return render(request, "app/follower.html", response)
 
 
@@ -224,22 +227,31 @@ def follower_ratio_rank_desc(request):
         "screen_name": "",
         "follower": "",
         "rank": 0,
+        "all_users_count": 0,
     }
-    response["my_self_info"] = params["my_self_info"]
-    response["screen_name"] = params["screen_name"]
-    response["follower"] = Follower_Info.objects.filter(my_screen_name=params["screen_name"]).order_by("-ratio")
-    response["rank"] = follower_rank(response["follower"])
+    response["my_self_info"] = request.GET.get("my_self_info")
+    response["screen_name"] = request.GET.get("screen_name")
+    response["follower"] = Follower_Info.objects.filter(my_screen_name=response["screen_name"]).order_by("-ratio")
+    response["rank"] = follower_rank(request, response["follower"])
+    response["all_users_count"] = all_users_count(response["follower"])
     return render(request, "app/follower.html", response)
 
-##################       自分の順位       ##########################
+##################       順位       ##########################
 
-
-def follower_rank(follower):
+#######    自分の順位     ###########
+def follower_rank(request, follower):
     rank = 0
     for screen_name in follower:
         rank += 1
-        if screen_name.screen_name == params["screen_name"]:
+        if screen_name.screen_name == request.GET.get("screen_name"):
             break
+    return rank
+
+#######    何位中     ###########
+def all_users_count(follower):
+    rank = 0
+    for screen_name in follower:
+        rank += 1
     return rank
 
 
@@ -249,13 +261,6 @@ def index(request):
 def select(request):
     return render(request, "app/select.html")
 
-# def redirect(request):
-#     param1 = request.GET.get('screen_name')
-#     param2 = request.GET.get('my_self_info')
-#     redirect_url = reverse('friend_ratio_rank_desc')
-#     parameters = urlencode({'screen_name': param1, 'my_self_info': param2})
-#     url = f'{redirect_url}?{parameters}'
-#     return redirect(url)
 
 
 ####################################     フォローしている人/フォロワーの全情報をDBに格納     #########################################
@@ -272,34 +277,23 @@ def info_get(request):
 
         user_info["screen_name"] = request.POST["screen_name"]
         user_info["my_self_info"] = api.get_user(screen_name=user_info["screen_name"])
-        params["form"] = HelloForm(request.POST)
-
-        # params["screen_name"] = request.POST["screen_name"]
-        # params["form"] = HelloForm(request.POST)
-
-        # my_screen_name = params["screen_name"]
-        # my_self_info = api.get_user(screen_name=params["screen_name"])
-        # params["my_self_info"] = my_self_info
+        user_info["form"] = HelloForm(request.POST)
 
         redirect_url = reverse('select')
         parameters = urlencode({'screen_name': user_info["screen_name"], 'my_self_info': user_info["my_self_info"]})
         url = f'{redirect_url}?{parameters}'
 
-
         try:
-            # fridnd_info_save(my_screen_name, my_self_info)
-            # follower_info_save(my_screen_name, my_self_info)
-            # fridnd_info_save(request, user_info["screen_name"], user_info["my_self_info"])
-            # follower_info_save(request, user_info["screen_name"], user_info["my_self_info"])
+            fridnd_info_save(request, user_info["screen_name"], user_info["my_self_info"])
+            follower_info_save(request, user_info["screen_name"], user_info["my_self_info"])
             return redirect(url)
-            # return render(request, "app/select.html", params)
 
         except:
-            return render(request, "app/except.html", params)
+            return render(request, "app/except.html", user_info)
 
 
     else:
-        return render(request, "app/index.html", params)
+        return render(request, "app/index.html", user_info)
 
 
 ####################################     フォローしている人の情報をDBに格納     #########################################
