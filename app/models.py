@@ -11,7 +11,7 @@ class Friend_Info(models.Model):
     followers_count = models.IntegerField(default=0)
     ratio = models.FloatField(default=0)
     statuses_count = models.IntegerField(default=0) #ツイート数
-    created_at = models.DateField() #アカウントの作成日時
+    created_at = models.DateField(default="1234-01-02") #アカウントの作成日時
     description = models.CharField(max_length=100) #プロフィール文の詳細文
     favourites_count = models.IntegerField(default=0)  #自分がお気に入りしたツイートの数
 
@@ -26,7 +26,7 @@ class Follower_Info(models.Model):
     followers_count = models.IntegerField(default=0)
     ratio = models.FloatField(default=0)
     statuses_count = models.IntegerField(default=0) #ツイート数
-    created_at = models.DateField() #アカウントの作成日時
+    created_at = models.DateField(default="1234-01-02") #アカウントの作成日時
     description = models.CharField(max_length=100) #プロフィール文の詳細文
     favourites_count = models.IntegerField(default=0)  #自分がお気に入りしたツイートの数
 

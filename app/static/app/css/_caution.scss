@@ -1,0 +1,34 @@
+
+
+.caution {
+    margin: 2em 0;
+    //background: #dcefff;
+    background: #f4f4f4;
+    border: 1px solid #5bb7ae;
+    text-align: left;
+}
+.caution .caution-title {
+    font-size: 1.2em;
+    //background: #5fb3f5;
+    background: #5bb7ae;
+    padding: 4px;
+    text-align: center;
+    color: #FFF;
+    font-weight: bold;
+    letter-spacing: 0.05em;
+}
+.caution p {
+    padding: 15px 20px;
+    margin: 0;
+    line-height: 1.5;
+}
+
+
+@media(min-width: 768px){
+    .caution{
+        width: 50%;
+        margin: 0 auto;
+        margin-top: 50px;
+        margin-bottom: 100px;
+    }
+}
