@@ -24,7 +24,11 @@
             <p class="input">{{ form }}</p>
             <p class="btn"><input class="btn_submit" type="submit" value="click"></p>
         </form>
-        <img src="{% static "app/img/twitter_bird.png" %}" id="bird">
+        <div class="caution">
+            <div class="caution-title">＊注意書き＊</div>
+            <p>このアプリは入力するユーザーのフォロー・フォロワー数によってロード時間が大きく異なります。場合によっては処理できません。処理できる限界は300~400人程度です。フォロー・フォロワー数がこれ以上のユーザーの処理は現段階では難しいです。さらに、ロード時間が10分以上かかることがあります。これらのことをご理解いただいた上でお使いください。随時改善していきます。</p>
+        </div>
+        {% comment %} <img src="{% static "app/img/twitter_bird.png" %}" id="bird"> {% endcomment %}
     </main>
 
     <script>

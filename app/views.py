@@ -11,7 +11,6 @@ from django.urls import reverse
 from urllib.parse import urlencode
 from django.shortcuts import redirect
 
-
 auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
 auth.set_access_token(ACCESS_TOKEN, ACCESS_TOKEN_SECRET)
 api = tweepy.API(auth, wait_on_rate_limit=True)
@@ -289,7 +288,7 @@ def info_get(request):
             return redirect(url)
 
         except:
-            return render(request, "app/except.html", user_info)
+            return render(request, "app/except.html")
 
 
     else:
