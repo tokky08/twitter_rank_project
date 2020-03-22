@@ -21,7 +21,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'u^o=8q6h6u-y10d!!iyn3ds_bfwupbeju_zs(jda(wh_+3z+-x'
+# SECRET_KEY = ""
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG = True
@@ -51,6 +52,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware', #追加
 ]
 
 ROOT_URLCONF = 'project.urls'
@@ -135,5 +137,14 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 #追加
-db_from_env = dj_database_url.config(conn_max_age=500)
+# db_from_env = dj_database_url.config(conn_max_age=500)
+db_from_env = dj_database_url.config(conn_max_age=600, ssl_require=True)
 DATABASES['default'].update(db_from_env)
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+#追加
+if not DEBUG:
+    SECRET_KEY = os.environ['SECRET_KEY']
+    import django_heroku 
+    django_heroku.settings(locals()) 
