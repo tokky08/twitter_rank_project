@@ -24,7 +24,30 @@
             <p class="input">{{ form }}</p>
             <p class="btn"><input class="btn_submit" type="submit" value="click"></p>
         </form>
+        <div class="caution">
+            <div class="caution-title">＊注意書き＊</div>
+            <p>このアプリは入力するユーザーのフォロー・フォロワー数によってロード時間が大きく異なります。場合によっては処理できません。処理できる限界は300~400人程度です。フォロー・フォロワー数がこれ以上のユーザーの処理は現段階では難しいです。さらに、ロード時間が10分以上かかることがあります。これらのことをご理解いただいた上でお使いください。随時改善していきます。</p>
+        </div>
+        {% comment %} <img src="{% static "app/img/twitter_bird.png" %}" id="bird"> {% endcomment %}
     </main>
+
+    <script>
+        var y = 0;
+        var x = 0;
+
+        addEventListener("keydown", keydownfunc, false);
+
+        function keydownfunc(event){
+            var key_code = event.keyCode;
+            if(key_code === 37) x-=32;
+            if(key_code === 38) y-=32;
+            if(key_code === 39) x+=32;
+            if(key_code === 40) y+=32;
+            document.getElementById("bird").style.top = y + "px";
+            document.getElementById("bird").style.left = x + "px";
+        }
+    </script>
 </body>
 
 </html>
+
