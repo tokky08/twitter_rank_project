@@ -9,9 +9,11 @@ chardet==3.0.4
 chromedriver-binary==79.0.3945.36.0
 decorator==4.4.1
 defusedxml==0.6.0
+dj-database-url==0.5.0
 Django==2.2.5
 django-lint==2.0.4
 entrypoints==0.3
+gunicorn==20.0.4
 idna==2.8
 ipykernel==5.1.4
 ipython==7.12.0
@@ -71,5 +73,7 @@ tweepy==3.8.0
 urllib3==1.25.8
 wcwidth==0.1.8
 webencodings==0.5.1
+whitenoise==5.0.1
 widgetsnbextension==3.5.1
 wrapt==1.11.2
+psycopg2==2.7.6.1
