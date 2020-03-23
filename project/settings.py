@@ -144,7 +144,18 @@ DATABASES['default'].update(db_from_env)
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 #追加
+try:
+    from .local_settings import *
+except ImportError:
+    pass
+
 if not DEBUG:
     SECRET_KEY = os.environ['SECRET_KEY']
+    CONSUMER_KEY = os.environ['CONSUMER_KEY']
+    CONSUMER_SECRET = os.environ['CONSUMER_SECRET']
+    ACCESS_TOKEN = os.environ['ACCESS_TOKEN']
+    ACCESS_TOKEN_SECRET = ['ACCESS_TOKEN_SECRET']
     # import django_heroku 
     # django_heroku.settings(locals()) 
+
+    
