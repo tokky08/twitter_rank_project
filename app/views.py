@@ -5,7 +5,7 @@ from django.http import HttpResponse
 from django.views.generic import TemplateView
 from .forms import HelloForm
 import tweepy
-from .api_key import *
+# from .api_key import *
 from .models import Friend_Info, Follower_Info
 from django.urls import reverse
 from urllib.parse import urlencode
