@@ -5,9 +5,4 @@ myvenv
 __pycache__
 local_settings.py
 .DS_Store
-requirements_sample.txt
-requirements_sample2.txt
-requirements_sample_master.txt
-requirements_master2.txt
-requirements_master3.txt
-requirements_master4.txt
+requirements_*
