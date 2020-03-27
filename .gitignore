@@ -3,5 +3,4 @@ app/api_key.py
 db.sqlite3
 __pycache__
 local_settings.py
-requirements_sample.txt
-requirements_sample2.txt
+requirements_*
