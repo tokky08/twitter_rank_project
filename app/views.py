@@ -256,17 +256,23 @@ def info_get(request):
         user_info["my_self_info"] = api.get_user(screen_name=user_info["screen_name"])
         user_info["form"] = HelloForm(request.POST)
 
-        redirect_url = reverse('select')
-        parameters = urlencode({'screen_name': user_info["screen_name"]})
-        url = f'{redirect_url}?{parameters}'
+        user_counts = user_info["my_self_info"].friends_count + user_info["my_self_info"].followers_count
 
-        try:
-            fridnd_info_save(request, user_info["screen_name"], user_info["my_self_info"])
-            follower_info_save(request, user_info["screen_name"], user_info["my_self_info"])
-            return redirect(url)
-
-        except:
+        if user_counts > 101:
             return render(request, "app/except.html")
+            
+        else:
+            redirect_url = reverse('select')
+            parameters = urlencode({'screen_name': user_info["screen_name"]})
+            url = f'{redirect_url}?{parameters}'
+
+            try:
+                fridnd_info_save(request, user_info["screen_name"], user_info["my_self_info"])
+                follower_info_save(request, user_info["screen_name"], user_info["my_self_info"])
+                return redirect(url)
+
+            except:
+                return render(request, "app/except.html")
 
 
     else:
