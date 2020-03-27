@@ -21,12 +21,10 @@ api = tweepy.API(auth, wait_on_rate_limit=True)
 ##################       フォロー数     ##########################
 def friend_friend_rank_asc(request):
     response = {
-        "my_self_info": "",
         "screen_name": "",
         "friend": "",
         "rank": 0,
     }
-    response["my_self_info"] = request.GET.get("my_self_info")
     response["screen_name"] = request.GET.get("screen_name")
     response["friend"] = Friend_Info.objects.filter(my_screen_name=response["screen_name"]).order_by("friends_count")
     response["rank"] = friend_rank(request, response["friend"])
@@ -36,12 +34,10 @@ def friend_friend_rank_asc(request):
 
 def friend_friend_rank_desc(request):
     response = {
-        "my_self_info": "",
         "screen_name": "",
         "friend": "",
         "rank": 0,
     }
-    response["my_self_info"] = request.GET.get("my_self_info")
     response["screen_name"] = request.GET.get("screen_name")
     response["friend"] = Friend_Info.objects.filter(my_screen_name=response["screen_name"]).order_by("-friends_count")
     response["rank"] = friend_rank(request, response["friend"])
@@ -53,12 +49,10 @@ def friend_friend_rank_desc(request):
 
 def friend_follower_rank_asc(request):
     response = {
-        "my_self_info": "",
         "screen_name": "",
         "friend": "",
         "rank": 0,
     }
-    response["my_self_info"] = request.GET.get("my_self_info")
     response["screen_name"] = request.GET.get("screen_name")
     response["friend"] = Friend_Info.objects.filter(my_screen_name=response["screen_name"]).order_by("followers_count")
     response["rank"] = friend_rank(request, response["friend"])
@@ -68,12 +62,10 @@ def friend_follower_rank_asc(request):
 
 def friend_follower_rank_desc(request):
     response = {
-        "my_self_info": "",
         "screen_name": "",
         "friend": "",
         "rank": 0,
     }
-    response["my_self_info"] = request.GET.get("my_self_info")
     response["screen_name"] = request.GET.get("screen_name")
     response["friend"] = Friend_Info.objects.filter(my_screen_name=response["screen_name"]).order_by("-followers_count")
     response["rank"] = friend_rank(request, response["friend"])
@@ -85,12 +77,10 @@ def friend_follower_rank_desc(request):
 
 def friend_ratio_rank_asc(request):
     response = {
-        "my_self_info": "",
         "screen_name": "",
         "friend": "",
         "rank": 0,
     }
-    response["my_self_info"] = request.GET.get("my_self_info")
     response["screen_name"] = request.GET.get("screen_name")
     response["friend"] = Friend_Info.objects.filter(my_screen_name=response["screen_name"]).order_by("ratio")
     response["rank"] = friend_rank(request, response["friend"])
@@ -100,13 +90,11 @@ def friend_ratio_rank_asc(request):
 
 def friend_ratio_rank_desc(request):
     response = {
-        "my_self_info": "",
         "screen_name": "",
         "friend": "",
         "rank": 0,
         "all_users_count": 0,
     }
-    response["my_self_info"] = request.GET.get("my_self_info")
     response["screen_name"] = request.GET.get("screen_name")
     response["friend"] = Friend_Info.objects.filter(my_screen_name=response["screen_name"]).order_by("-ratio")
     response["rank"] = friend_rank(request, response["friend"])
@@ -138,13 +126,11 @@ def all_users_count(friend):
 ##################       フォロー数     ##########################
 def follower_friend_rank_asc(request):
     response = {
-        "my_self_info": "",
         "screen_name": "",
         "follower": "",
         "rank": 0,
         "all_users_count": 0,
     }
-    response["my_self_info"] = request.GET.get("my_self_info")
     response["screen_name"] = request.GET.get("screen_name")
     response["follower"] = Follower_Info.objects.filter(my_screen_name=response["screen_name"]).order_by("friends_count")
     response["rank"] = follower_rank(request, response["follower"])
@@ -154,13 +140,11 @@ def follower_friend_rank_asc(request):
 
 def follower_friend_rank_desc(request):
     response = {
-        "my_self_info": "",
         "screen_name": "",
         "follower": "",
         "rank": 0,
         "all_users_count": 0,
     }
-    response["my_self_info"] =request.GET.get("my_self_info")
     response["screen_name"] = request.GET.get("screen_name")
     response["follower"] = Follower_Info.objects.filter(my_screen_name=response["screen_name"]).order_by("-friends_count")
     response["rank"] = follower_rank(request, response["follower"])
@@ -172,13 +156,11 @@ def follower_friend_rank_desc(request):
 
 def follower_follower_rank_asc(request):
     response = {
-        "my_self_info": "",
         "screen_name": "",
         "follower": "",
         "rank": 0,
         "all_users_count": 0,
     }
-    response["my_self_info"] = request.GET.get("my_self_info")
     response["screen_name"] = request.GET.get("screen_name")
     response["follower"] = Follower_Info.objects.filter(my_screen_name=response["screen_name"]).order_by("followers_count")
     response["rank"] = follower_rank(request, response["follower"])
@@ -188,13 +170,11 @@ def follower_follower_rank_asc(request):
 
 def follower_follower_rank_desc(request):
     response = {
-        "my_self_info": "",
         "screen_name": "",
         "follower": "",
         "rank": 0,
         "all_users_count": 0,
     }
-    response["my_self_info"] = request.GET.get("my_self_info")
     response["screen_name"] = request.GET.get("screen_name")
     response["follower"] = Follower_Info.objects.filter(my_screen_name=response["screen_name"]).order_by("-followers_count")
     response["rank"] = follower_rank(request, response["follower"])
@@ -206,13 +186,11 @@ def follower_follower_rank_desc(request):
 
 def follower_ratio_rank_asc(request):
     response = {
-        "my_self_info": "",
         "screen_name": "",
         "follower": "",
         "rank": 0,
         "all_users_count": 0,
     }
-    response["my_self_info"] = request.GET.get("my_self_info")
     response["screen_name"] = request.GET.get("screen_name")
     response["follower"] = Follower_Info.objects.filter(my_screen_name=response["screen_name"]).order_by("ratio")
     response["rank"] = follower_rank(request, response["follower"])
@@ -222,13 +200,11 @@ def follower_ratio_rank_asc(request):
 
 def follower_ratio_rank_desc(request):
     response = {
-        "my_self_info": "",
         "screen_name": "",
         "follower": "",
         "rank": 0,
         "all_users_count": 0,
     }
-    response["my_self_info"] = request.GET.get("my_self_info")
     response["screen_name"] = request.GET.get("screen_name")
     response["follower"] = Follower_Info.objects.filter(my_screen_name=response["screen_name"]).order_by("-ratio")
     response["rank"] = follower_rank(request, response["follower"])
@@ -279,7 +255,7 @@ def info_get(request):
         user_info["form"] = HelloForm(request.POST)
 
         redirect_url = reverse('select')
-        parameters = urlencode({'screen_name': user_info["screen_name"], 'my_self_info': user_info["my_self_info"]})
+        parameters = urlencode({'screen_name': user_info["screen_name"]})
         url = f'{redirect_url}?{parameters}'
 
         try:
