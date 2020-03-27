@@ -20,27 +20,27 @@
     <header id="header_rank">
         {% if request.path == "/follower_friend_rank_asc/" %}
         <div class="change_btn order_change_btn">
-            <a href="{% url "follower_friend_rank_desc" %}?screen_name={{request.GET.screen_name}}&my_self_info={{request.GET.my_self_info}}" class="change">降順へ</a>
+            <a href="{% url "follower_friend_rank_desc" %}?screen_name={{request.GET.screen_name}}" class="change">降順へ</a>
         </div>
         {% elif request.path == "/follower_friend_rank_desc/" %}
         <div class="change_btn order_change_btn">
-            <a href="{% url "follower_friend_rank_asc" %}?screen_name={{request.GET.screen_name}}&my_self_info={{request.GET.my_self_info}}" class="change">昇順へ</a>
+            <a href="{% url "follower_friend_rank_asc" %}?screen_name={{request.GET.screen_name}}" class="change">昇順へ</a>
         </div>
         {% elif request.path == "/follower_follower_rank_asc/" %}
         <div class="change_btn order_change_btn">
-            <a href="{% url "follower_follower_rank_desc" %}?screen_name={{request.GET.screen_name}}&my_self_info={{request.GET.my_self_info}}" class="change">降順へ</a>
+            <a href="{% url "follower_follower_rank_desc" %}?screen_name={{request.GET.screen_name}}" class="change">降順へ</a>
         </div>
         {% elif request.path == "/follower_follower_rank_desc/" %}
         <div class="change_btn order_change_btn">
-            <a href="{% url "follower_follower_rank_asc" %}?screen_name={{request.GET.screen_name}}&my_self_info={{request.GET.my_self_info}}" class="change">昇順へ</a>
+            <a href="{% url "follower_follower_rank_asc" %}?screen_name={{request.GET.screen_name}}" class="change">昇順へ</a>
         </div>
         {% elif request.path == "/follower_ratio_rank_asc/" %}
         <div class="change_btn order_change_btn">
-            <a href="{% url "follower_ratio_rank_desc" %}?screen_name={{request.GET.screen_name}}&my_self_info={{request.GET.my_self_info}}" class="change">降順へ</a>
+            <a href="{% url "follower_ratio_rank_desc" %}?screen_name={{request.GET.screen_name}}" class="change">降順へ</a>
         </div>
         {% elif request.path == "/follower_ratio_rank_desc/" %}
         <div class="change_btn order_change_btn">
-            <a href="{% url "follower_ratio_rank_asc" %}?screen_name={{request.GET.screen_name}}&my_self_info={{request.GET.my_self_info}}" class="change">昇順へ</a>
+            <a href="{% url "follower_ratio_rank_asc" %}?screen_name={{request.GET.screen_name}}" class="change">昇順へ</a>
         </div>
         {% endif %}
         <div id="nav-toggle">
@@ -55,7 +55,7 @@
                 <ul>
                     <li class="icon_img"><img src="{% static "app/img/icon_title.png" %}"></li>
                     <li class="nav_content"><a href="{% url "index" %}">TOP</a></li>
-                    <li class="nav_content"><a href="{% url "friend_ratio_rank_desc" %}?screen_name={{request.GET.screen_name}}&my_self_info={{request.GET.my_self_info}}">フォローしている人達と比べる</a></li>
+                    <li class="nav_content"><a href="{% url "friend_ratio_rank_desc" %}?screen_name={{request.GET.screen_name}}">フォローしている人達と比べる</a></li>
                 </ul>
             </nav>
         </div>
@@ -88,17 +88,17 @@
                 {% if request.path == "/follower_friend_rank_asc/" or request.path == "/follower_friend_rank_desc/" %}
                     <th class="heading">friend</th>
                 {% else %}
-                    <th><a href="{% url 'follower_friend_rank_desc' %}?screen_name={{request.GET.screen_name}}&my_self_info={{request.GET.my_self_info}}">friend</a></th>
+                    <th><a href="{% url 'follower_friend_rank_desc' %}?screen_name={{request.GET.screen_name}}">friend</a></th>
                 {% endif%}
                 {% if request.path == "/follower_follower_rank_asc/" or request.path == "/follower_follower_rank_desc/" %}
                     <th class="heading">follower</th>
                 {% else %}
-                    <th><a href="{% url 'follower_follower_rank_desc' %}?screen_name={{request.GET.screen_name}}&my_self_info={{request.GET.my_self_info}}">follower</a></th>
+                    <th><a href="{% url 'follower_follower_rank_desc' %}?screen_name={{request.GET.screen_name}}">follower</a></th>
                 {% endif%}
                 {% if request.path == "/follower_ratio_rank_asc/" or request.path == "/follower_ratio_rank_desc/" %}
                     <th class="heading">ratio</th>
                 {% else %}
-                    <th><a href="{% url 'follower_ratio_rank_desc' %}?screen_name={{request.GET.screen_name}}&my_self_info={{request.GET.my_self_info}}">ratio</a></th>
+                    <th><a href="{% url 'follower_ratio_rank_desc' %}?screen_name={{request.GET.screen_name}}">ratio</a></th>
                 {% endif%}
                 </tr>
                 {% for item in follower %}
