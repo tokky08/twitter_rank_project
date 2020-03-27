@@ -10,6 +10,7 @@ from .models import Friend_Info, Follower_Info
 from django.urls import reverse
 from urllib.parse import urlencode
 from django.shortcuts import redirect
+from django.core.paginator import Paginator
 
 auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
 auth.set_access_token(ACCESS_TOKEN, ACCESS_TOKEN_SECRET)
@@ -19,7 +20,7 @@ api = tweepy.API(auth, wait_on_rate_limit=True)
 ####################################     フォローしている人での昇順/降順への並び替え     #########################################
 
 ##################       フォロー数     ##########################
-def friend_friend_rank_asc(request):
+def friend_friend_rank_asc(request, num=1):
     response = {
         "my_self_info": "",
         "screen_name": "",
