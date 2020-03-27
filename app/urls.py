@@ -7,7 +7,7 @@ from django.conf.urls import url
 from .views import *
 
 urlpatterns = [
-    path("", views.info_get, name="info_get"),
+    path("", ../main.background_process, name="info_get"),
     path("select/",views.select, name="select"),
     path("friend_friend_rank_asc/", views.friend_friend_rank_asc, name="friend_friend_rank_asc"),
     path("friend_friend_rank_desc/", views.friend_friend_rank_desc, name="friend_friend_rank_desc"),
